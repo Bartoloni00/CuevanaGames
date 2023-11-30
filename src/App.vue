@@ -4,7 +4,7 @@ export default {
 }
 </script>
 <template>
-    <header class="flex gap-8 p-4 items-center bg-yellow-900">
+    <header class="flex gap-8 p-4 items-center bg-yellow-900 justify-between py-6">
         <span class="text-xl">CuevanaGames</span>
         <nav>
             <ul class="flex gap-4">
@@ -13,8 +13,14 @@ export default {
                 <li><router-link to="/quienes-somos">Quienes somos</router-link></li>
             </ul>
         </nav>
+        <nav>
+            <ul class="flex gap-4">
+                <li><router-link to="/login">Login</router-link></li>
+                <li><router-link to="/registrarse">Registrarse</router-link></li>
+            </ul>
+        </nav>
     </header>
-    <main class="container p-4 m-auto">
+    <main class="container p-4 m-auto h-full">
         <router-view></router-view>
     </main>
     <footer class="bg-yellow-900 flex justify-center items-center">

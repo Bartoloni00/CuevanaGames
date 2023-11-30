@@ -1,16 +1,17 @@
 <script>
 import { chatSubscribeToMessage, chatSaveMessage } from '../services/chat.js'
-
+import BaseLabel from '../components/BaseLabel.vue'
+import BaseButton from '../components/BaseButton.vue'
 export default {
     name: 'Chat',
     data() {
         return {
-            messages:[],
+            messages: [],
             newMessage: {
                 user: '',
                 message: '',
-        }
-        }
+            }
+        };
     },
     methods: {
         sendMessage() {
@@ -18,16 +19,17 @@ export default {
                 user: this.newMessage.user,
                 message: this.newMessage.message,
             })
-            .then(()=>{
-                this.newMessage = ''
-            })
+                .then(() => {
+                this.newMessage = '';
+            });
         },
     },
     mounted() {
         chatSubscribeToMessage(messages => {
-            this.messages = messages
-        })
-    }
+            this.messages = messages;
+        });
+    },
+    components: { BaseButton, BaseLabel }
 }
 </script>
 <template>
@@ -37,28 +39,28 @@ export default {
                 <div v-for="message in messages" class="mb-2">
                     <div><b>Usuario:</b> {{ message.user }}</div>
                     <div><b>Mensaje:</b> {{ message.message }}</div>
+                    <div class="text-right">{{ message.created_at }}</div>
                 </div>
             </div>
             <form action="#" @submit.prevent="sendMessage" class="min-w-[320px]">
-                <label>
-                <span class="block">Usuario</span>
+                <div>
+                <BaseLabel>Usuario</BaseLabel>
                 <input 
                     class="border border-yellow-900 w-full"
                     type="text" 
                     id="user"
+                    name="user"
                     v-model="newMessage.user">
-                </label>
-                <label>
-                <span class="block">Mensaje</span>
+                </div>
+                <div>
+                <BaseLabel>Mensaje</BaseLabel>
                 <textarea 
                     class="border border-yellow-900 w-full"
                     id="message"
+                    name="message"
                     v-model="newMessage.message"></textarea>
-                </label>
-                <button 
-                type="submit" 
-                class="block w-full py-1 bg-yellow-900 text-white"
-                >Enviar</button>
+                </div>
+                <BaseButton color="green">Enviar mensaje</BaseButton>
             </form>
         </div>
 </template>
