@@ -1,6 +1,23 @@
 <script>
+import { subscribeToAuth } from './services/auth.js';
 export default {
     name: 'App',
+    data() {
+        return {
+            user:{
+                id: null,
+                email: null,
+            }
+        }
+    },
+    mounted() {
+        subscribeToAuth(newUserData => {
+            this.user = {
+                ...newUserData,
+            }
+        })
+    }
+    
 }
 </script>
 <template>
@@ -11,12 +28,19 @@ export default {
                 <li><router-link to="/">Home</router-link></li>
                 <li><router-link to="/chat">Chat</router-link></li>
                 <li><router-link to="/quienes-somos">Quienes somos</router-link></li>
-            </ul>
-        </nav>
-        <nav>
-            <ul class="flex gap-4">
+        <template v-if="user.id === null">
                 <li><router-link to="/login">Login</router-link></li>
                 <li><router-link to="/registrarse">Registrarse</router-link></li>
+        </template>
+        <template v-else>
+            <li><router-link to="/perfil">Mi perfil</router-link></li>
+            <li>
+                <form action="#">
+                    <span>{{ user.email }}</span>
+                    <button type="submit">cerrar session</button>
+                </form>
+            </li>
+        </template>
             </ul>
         </nav>
     </header>
