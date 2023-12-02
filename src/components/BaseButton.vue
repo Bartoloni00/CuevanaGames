@@ -1,4 +1,6 @@
 <script>
+import BaseLoader from './BaseLoader.vue';
+
 export default {
     name: 'BaseButton',
     props: {
@@ -6,10 +8,14 @@ export default {
             type: String,
             default: 'yellow',
         },
+        loading: {
+            type: Boolean,
+            default: false,
+        },
     },
     computed: {
         bgColors() {
-            switch(this.color) {
+            switch (this.color) {
                 case 'green':
                     return 'bg-green-600 hover:bg-green-500 focus:bg-green-500 active:bg-green-700';
                     break;
@@ -21,7 +27,8 @@ export default {
                     break;
             }
         }
-    }
+    },
+    components: { BaseLoader }
 }
 </script>
 
@@ -29,6 +36,7 @@ export default {
     <button 
     type="submit" 
     :class="`transition w-full p-2 ${bgColors}`">
-        <slot>Enviar</slot>
+        <BaseLoader v-if="this.loading" />
+        <slot v-else >Enviar</slot>
     </button>
 </template>

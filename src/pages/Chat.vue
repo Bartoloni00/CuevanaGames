@@ -4,11 +4,13 @@ import { subscribeToAuth } from '../services/auth.js'
 import { formatDate } from '../helpers/date.js'
 import BaseLabel from '../components/BaseLabel.vue'
 import BaseButton from '../components/BaseButton.vue'
+import BaseLoader from '../components/BaseLoader.vue'
 export default {
     name: 'Chat',
-    components: { BaseButton, BaseLabel },
+    components: { BaseButton, BaseLabel, BaseLoader },
     data() {
         return {
+            loadingMessages: true,
             messages: [],
             newMessage: {
                 user: '',
@@ -25,6 +27,7 @@ export default {
     methods: {
         sendMessage() {
             chatSaveMessage({
+                userId: this.user.id,
                 user: this.user.email,
                 message: this.newMessage.message,
             })
@@ -37,8 +40,10 @@ export default {
         }
     },
     mounted() {
+        this.loadingMessages = true,
         this.chatUnSubscribe = chatSubscribeToMessage(messages => {
-            this.messages = messages;
+            this.messages = messages
+            this.loadingMessages = false
         });
         this.authUnSubscribe = subscribeToAuth(newUser => {
             this.user = {...newUser}
@@ -55,11 +60,19 @@ export default {
     <h1 class="mb-4 text-3xl">Impresionante chat en tiempo real</h1>
         <div class="flex gap-4 w-full justify-between">
             <div>
-                <div v-for="message in messages" class="mb-2">
-                    <div><b>Usuario:</b> {{ message.user }}</div>
+                <template v-if="this.loadingMessages">
+                    <BaseLoader/>
+                </template>
+                <template v-else>
+                    <div v-for="message in messages" class="mb-2">
+                    <div>
+                        <b>Usuario: </b> 
+                        <router-link :to="`/usuario/${message.userId}`" class="text-blue-600">{{ message.user }}</router-link>
+                    </div>
                     <div><b>Mensaje:</b> {{ message.message }}</div>
                     <div class="text-right">{{ dateToString(message.created_at) }}</div>
                 </div>
+                </template>
             </div>
             <form action="#" @submit.prevent="sendMessage" class="min-w-[320px]">
                 <div class="flex gap-2">

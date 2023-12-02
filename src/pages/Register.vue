@@ -9,6 +9,7 @@ export default {
     components: { BaseButton, BaseLabel, BaseInput },
     data(){
         return {
+            processingLogin: false,
             form: {
                 email: '',
                 password: '',
@@ -17,6 +18,8 @@ export default {
     },
     methods: {
         handleSubmit() {
+            if(this.processingLogin) return;
+            this.processingLogin = true
             register({...this.form})
             .then(()=>{
                 this.form.email = ''
@@ -30,7 +33,7 @@ export default {
 
 <template>
     <h1 class="mb-4">Register</h1>
-    <form action="#" class="max-w-[520px]" @submit.prevent="handleSubmit">
+    <form action="" class="max-w-[520px]" @submit.prevent="handleSubmit">
         <div>
             <BaseLabel for="email">Email</BaseLabel>
             <BaseInput 
@@ -47,6 +50,6 @@ export default {
                 v-model="form.password"
             />
         </div>
-        <BaseButton>Registrarse</BaseButton>
+        <BaseButton :loading="processingLogin">Registrarse</BaseButton>
     </form>
 </template>

@@ -41,7 +41,7 @@ export default {
             <li><router-link to="/chat">Chat</router-link></li>
             <li><router-link to="/perfil">Mi perfil</router-link></li>
             <li>
-                <form action="#" @submit.prevent="handleLogout">
+                <form action="" @submit.prevent="handleLogout">
                     <span class="m-1">{{ user.email }} </span>
                     <button type="submit"> cerrar session</button>
                 </form>

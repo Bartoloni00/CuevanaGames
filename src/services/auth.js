@@ -1,6 +1,7 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { auth } from './firebase.js'
 import { serverTimestamp } from "firebase/firestore"
+import { createUserProfile } from "./user.js"
 
 let userData = {
     id: null,
@@ -31,17 +32,21 @@ onAuthStateChanged(auth, user => {
     notifyAll()
 })
 
-export function register({email,password}) {
-    return createUserWithEmailAndPassword(auth, email, password)
-            .then(()=>{
-                return {...userData}
-            }) 
-            .catch(error=>{
-                return {
-                    code: error.code,
-                    message: error.message
-                }
-            })
+export async function register({email,password}) {
+    try {
+        const userCredentials = await createUserWithEmailAndPassword(auth, email, password)
+        
+        createUserProfile(userCredentials.user.uid,{
+            email
+        })
+
+        return {...userData}
+    } catch (error) {
+        return {
+            code: error.code,
+            message: error.message
+        }
+    }
 }
 
 /**

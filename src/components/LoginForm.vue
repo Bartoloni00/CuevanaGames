@@ -10,6 +10,7 @@ export default {
     components: {BaseButton, BaseLabel, BaseInput},
     data() {
         return {
+            processingLogin: false,
             form: {
                 email: '',
                 password: '',
@@ -18,6 +19,8 @@ export default {
     },
     methods: {
         handleLogin() {
+            if(this.processingLogin) return 
+            this.processingLogin = true
             // console.log('ejecutando el login:', this.form);
             login({...this.form})
             .then(user => {
@@ -30,7 +33,7 @@ export default {
 </script>
 
 <template>
-     <form action="#" class="max-w-[520px]" @submit.prevent="handleLogin">
+     <form action="" class="max-w-[520px]" @submit.prevent="handleLogin">
         <div>
             <BaseLabel for="email">Email</BaseLabel>
             <BaseInput 
@@ -46,6 +49,6 @@ export default {
                 id="password"
                 v-model="form.password "/>
         </div>
-        <BaseButton>Ingresar</BaseButton>
+        <BaseButton :loading="processingLogin">Ingresar</BaseButton>
     </form>
 </template>

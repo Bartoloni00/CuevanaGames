@@ -19,6 +19,7 @@ export function chatSubscribeToMessage(callback)
             return {
                 user: doc.data().user,
                 message: doc.data().message,
+                userId: doc.data().userId,
                 created_at: doc.data().created_at,
             }
         })
