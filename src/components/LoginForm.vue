@@ -1,11 +1,13 @@
 <script>
-import BaseLabel from './BaseLabel.vue'
 import BaseButton from './BaseButton.vue'
+import BaseInput from './BaseInput.vue'
+import BaseLabel from './BaseLabel.vue'
+
 import { login } from '../services/auth.js'
 
 export default {
     name: 'LoginForm',
-    components: {BaseButton, BaseLabel},
+    components: {BaseButton, BaseLabel, BaseInput},
     data() {
         return {
             form: {
@@ -19,6 +21,8 @@ export default {
             // console.log('ejecutando el login:', this.form);
             login({...this.form})
             .then(user => {
+                // Redireccionamos al perfil.
+                this.$router.push({path: '/perfil'})
             })
         },
     }
@@ -28,20 +32,19 @@ export default {
 <template>
      <form action="#" class="max-w-[520px]" @submit.prevent="handleLogin">
         <div>
-            <BaseLabel>Email</BaseLabel>
-            <input 
-                class="border border-yellow-900 w-full"
-                type="email" 
+            <BaseLabel for="email">Email</BaseLabel>
+            <BaseInput 
+                type="email"
                 id="email"
-                v-model="form.email">
+                v-model="form.email"
+            />
         </div>
         <div>
-            <BaseLabel>Contraseña</BaseLabel>
-            <input 
-                class="border border-yellow-900 w-full"
+            <BaseLabel for="password">Contraseña</BaseLabel>
+            <BaseInput
                 type="password" 
                 id="password"
-                v-model="form.password ">
+                v-model="form.password "/>
         </div>
         <BaseButton>Ingresar</BaseButton>
     </form>

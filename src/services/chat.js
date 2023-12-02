@@ -14,7 +14,7 @@ export function chatSubscribeToMessage(callback)
 {
     // creamos un query para poder filtrar los datos/traerlos en un orden especifico
     const q = query(refChat, orderBy('created_at'))
-    onSnapshot(refChat,snapshot=>{ // datos en tiempo real, trae los datos ordenados por su id por lo que para nosotros parecera que los trae desordenados
+    return onSnapshot(refChat,snapshot=>{ // datos en tiempo real, trae los datos ordenados por su id por lo que para nosotros parecera que los trae desordenados
         const messages = snapshot.docs.map(doc => {
             return {
                 user: doc.data().user,

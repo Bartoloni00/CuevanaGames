@@ -1,23 +1,31 @@
 <script>
 import { chatSubscribeToMessage, chatSaveMessage } from '../services/chat.js'
+import { subscribeToAuth } from '../services/auth.js'
 import { formatDate } from '../helpers/date.js'
 import BaseLabel from '../components/BaseLabel.vue'
 import BaseButton from '../components/BaseButton.vue'
 export default {
     name: 'Chat',
+    components: { BaseButton, BaseLabel },
     data() {
         return {
             messages: [],
             newMessage: {
                 user: '',
                 message: '',
-            }
+            },
+            user: {
+                id: null,
+                email: null,
+            },
+            authUnSubscribe: () => {},
+            chatUnSubscribe: () => {},
         };
     },
     methods: {
         sendMessage() {
             chatSaveMessage({
-                user: this.newMessage.user,
+                user: this.user.email,
                 message: this.newMessage.message,
             })
                 .then(() => {
@@ -29,11 +37,18 @@ export default {
         }
     },
     mounted() {
-        chatSubscribeToMessage(messages => {
+        this.chatUnSubscribe = chatSubscribeToMessage(messages => {
             this.messages = messages;
         });
+        this.authUnSubscribe = subscribeToAuth(newUser => {
+            this.user = {...newUser}
+        });
     },
-    components: { BaseButton, BaseLabel }
+    unmounted() {
+        // Limpiamos la subscripcion a auth
+        this.authUnSubscribe()
+        this.chatUnSubscribe()
+    }
 }
 </script>
 <template>
@@ -47,17 +62,12 @@ export default {
                 </div>
             </div>
             <form action="#" @submit.prevent="sendMessage" class="min-w-[320px]">
-                <div>
-                <BaseLabel>Usuario</BaseLabel>
-                <input 
-                    class="border border-yellow-900 w-full"
-                    type="text" 
-                    id="user"
-                    name="user"
-                    v-model="newMessage.user">
+                <div class="flex gap-2">
+                <BaseLabel for="user">Usuario</BaseLabel>
+                <p>{{ this.user.email }}</p>
                 </div>
                 <div>
-                <BaseLabel>Mensaje</BaseLabel>
+                <BaseLabel for="message">Mensaje</BaseLabel>
                 <textarea 
                     class="border border-yellow-900 w-full"
                     id="message"

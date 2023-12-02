@@ -4,5 +4,5 @@ export default {
 }
 </script>
 <template>
-    <label for="user" class="block"><slot>Nombre</slot>:</label>
+    <label><slot>Nombre</slot>:</label>
 </template>
