@@ -10,7 +10,6 @@ export default {
                 id: null,
                 email: null,
                 rol: null,
-                displayNmae: null,
             },
             loadingUser: true,
             authUnsubscribe: () => { },

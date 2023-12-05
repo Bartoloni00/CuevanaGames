@@ -1,37 +1,58 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
-import { auth } from './firebase.js'
-import { serverTimestamp } from "firebase/firestore"
+import { auth,db } from './firebase.js'
 import { createUserProfile } from "./user.js"
+import { doc, getDoc } from 'firebase/firestore'
 
 let userData = {
     id: null,
     email: null,
+    rol: null,
 }
 let observers = []
 
+async function fetchUserProfile(userId) {
+    try {
+        const docRef = doc(db, 'users', userId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            return docSnap.data();
+        } else {
+            console.log("No user profile found!");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching user profile: ", error);
+        return null;
+    }
+}
 // recordamos en localstorage que el usuario esta authenticado.
 // Esto ahorra tiempo ya que verificamos antes de que firebase nos lo diga.
 if (localStorage.getItem('userData')) {
     userData = JSON.parse(localStorage.getItem('userData'))
 }
 
-onAuthStateChanged(auth, user => {
+onAuthStateChanged(auth, async user => {
     if (user) {
-        userData = {
-            id: user.uid,
-            email: user.email,
-            rol: user.rol,
+        const profile = await fetchUserProfile(user.uid);
+  
+        if(profile) {
+            userData = {
+                id: user.uid,
+                email: user.email,
+                rol: profile.rol, // ahora accedemos al rol desde la data del perfil
+            };
+            localStorage.setItem('userData', JSON.stringify(userData));
+            notifyAll();
         }
-        localStorage.setItem('userData', JSON.stringify(userData))
     } else {
         userData = {
             id: null,
             email: null,
             rol: null,
-        }
+        };
+        localStorage.removeItem('userData');
     }
-    localStorage.removeItem('userData')
-    notifyAll()
 })
 
 export async function register({email,password}) {
@@ -72,9 +93,25 @@ export function login({email,password}) {
         });
 }
 
-export function logout(){
-    return signOut(auth)
+export function logout() {
+    return signOut(auth).then(() => {
+        // Aquí limpia cualquier información del usuario que tengas en el estado.
+        userData = {
+            id: null,
+            email: null,
+            rol: null,
+        };
+        // Remueve el perfil del usuario del localStorage también.
+        localStorage.removeItem('userData');
+        // Notifica a todos los observadores que el usuario ha cerrado sesión.
+        notifyAll();
+        console.log("Usuario ha cerrado sesión exitosamente.");
+    }).catch(error => {
+        // Aquí manejas el caso de un error al intentar cerrar la sesión.
+        console.error("Error al cerrar sesión: ", error);
+    });
 }
+
 /**
  * Agrega el observer para ser notificados de los datos
  * @param {({})=>void} callback 

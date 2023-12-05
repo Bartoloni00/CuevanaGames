@@ -1,23 +1,25 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { subscribeToAuth } from '../services/auth.js'
-import Chat from '../pages/Chat.vue'
+// import Chat from '../pages/Chat.vue'
 import Home from '../pages/Home.vue'
-import About from '../pages/About.vue'
+import Store from '../pages/Store.vue'
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import MyProfile from '../pages/MyProfile.vue'
 import UserProfile from '../pages/UserProfile.vue'
 import PrivateChat from '../pages/PrivateChat.vue'
+import DashBoard from '../pages/DashBoard.vue'
 
 const routes = [
     {path: '/',              component: Home,},
-    {path: '/quienes-somos', component: About,},
-    {path: '/chat',          component: Chat, meta: {requiresAuth: true}},
+    {path: '/tienda', component: Store,},
+    // {path: '/chat',          component: Chat, meta: {requiresAuth: true}},
     {path: '/login',         component: Login,},
     {path: '/registrarse',   component: Register,},
     {path: '/perfil',        component: MyProfile, meta: {requiresAuth: true}},
     {path: '/usuario/:id/',        component: UserProfile, meta: {requiresAuth: true}},
     {path: '/usuario/:id/chat',        component: PrivateChat, meta: {requiresAuth: true}},
+    {path: '/panel',        component: DashBoard, meta: {requiresAuth: true}},
 ]
 
 const router = createRouter({
@@ -28,7 +30,8 @@ const router = createRouter({
 // Proteger Rutas
 let user = {
     id: null,
-    email: null
+    email: null,
+    rol: null
 }
 subscribeToAuth(newUserData => {
     user = {
@@ -38,6 +41,10 @@ subscribeToAuth(newUserData => {
 router.beforeEach((to,from)=>{
     if(user.id === null && to.meta.requiresAuth && false) {
         return {path: '/login'}
+    }
+    if (to.path === '/panel' && user.rol !== 'admin') {
+        return {path: '/login'}
+
     }
 })
 
