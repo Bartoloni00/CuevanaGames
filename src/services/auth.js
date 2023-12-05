@@ -20,12 +20,14 @@ onAuthStateChanged(auth, user => {
         userData = {
             id: user.uid,
             email: user.email,
+            rol: user.rol,
         }
         localStorage.setItem('userData', JSON.stringify(userData))
     } else {
         userData = {
             id: null,
             email: null,
+            rol: null,
         }
     }
     localStorage.removeItem('userData')
@@ -37,7 +39,8 @@ export async function register({email,password}) {
         const userCredentials = await createUserWithEmailAndPassword(auth, email, password)
         
         createUserProfile(userCredentials.user.uid,{
-            email
+            email,
+            rol: 'client'
         })
 
         return {...userData}

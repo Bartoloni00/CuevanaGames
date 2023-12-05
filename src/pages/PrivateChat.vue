@@ -4,13 +4,16 @@ import BaseLabel from '../components/BaseLabel.vue';
 import BaseLoader from '../components/BaseLoader.vue';
 import { getUserById } from '../services/user.js';
 import { subscribeToAuth } from '../services/auth.js';
-import {sendPrivateMessage} from '../services/private-chat.js'
+import { formatDate } from '../helpers/date.js'
+import {sendPrivateMessage, subscribeToPrivateChat} from '../services/private-chat.js'
 
 export default {
     name: 'PrivateChat',
     components: { BaseLoader, BaseLabel, BaseButton },
     data(){
         return {
+            loadingMessages: true,
+            messages: [],
             loadingProfile: true,
             userProfile: {
                 id:null,
@@ -18,12 +21,14 @@ export default {
             },
             userAuth:{
                 id: null,
-                email: null
+                email: null,
+                rol: null,
             },
             newMessage:{
                 message:'',
             },
             authUnsubscribe: ()=>{},
+            messageUnsubscribe: ()=>{},
         }
     },
     methods: {
@@ -34,6 +39,9 @@ export default {
                 message: this.newMessage.message
             })
             this.newMessage.message = ''
+        },
+        dateToString(date) {
+            return formatDate(date)
         }
     },
     async mounted() {
@@ -41,6 +49,12 @@ export default {
         this.userProfile = await getUserById(this.$route.params.id)
         this.authUnsubscribe = subscribeToAuth(user => this.userAuth = user)
         this.loadingProfile = false
+        this.loadingMessages = true        
+        this.messageUnsubscribe = await subscribeToPrivateChat(
+            {user1: this.userProfile.id, user2: this.userAuth.id}, 
+            newMessages => this.messages = newMessages
+            )
+        this.loadingMessages = false        
     },
     unmounted(){
         this.authUnsubscribe()
@@ -52,7 +66,24 @@ export default {
         <h1>Chat privado con: {{ userProfile.email }}</h1>
         <section>
             <h2>Mensajes</h2>
-            <!-- Lista de mensajes -->
+            <template v-if="this.loadingMessages">
+                    <BaseLoader/>
+                </template>
+                <template v-else>
+                   <div class="flex flex-col">
+                    <div v-for="message in messages" class="mb-2 rounded-lg max-w-[66%]"
+                    :class="{
+                        'self-start': message.userId !== userAuth.id,
+                        'bg-green-300': message.userId !== userAuth.id,
+                        'self-end': message.userId === userAuth.id,
+                        'bg-yellow-300': message.userId === userAuth.id,
+                    }"
+                    >
+                        <p class="p-2">{{ message.message }}</p>
+                        <div class="text-right p-2">{{ dateToString(message.created_at) || 'enviando...'}}</div>
+                    </div>
+                   </div>
+                </template>
         </section>
         <section>
             <h2 class="sr-only">Enviar un mensaje</h2>
