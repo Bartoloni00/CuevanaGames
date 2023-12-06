@@ -9,6 +9,7 @@ import MyProfile from '../pages/MyProfile.vue'
 import UserProfile from '../pages/UserProfile.vue'
 import PrivateChat from '../pages/PrivateChat.vue'
 import DashBoard from '../pages/DashBoard.vue'
+import CreateGame from '../pages/CreateGame.vue'
 
 const routes = [
     {path: '/',              component: Home,},
@@ -20,6 +21,7 @@ const routes = [
     {path: '/usuario/:id/',        component: UserProfile, meta: {requiresAuth: true}},
     {path: '/usuario/:id/chat',        component: PrivateChat, meta: {requiresAuth: true}},
     {path: '/panel',        component: DashBoard, meta: {requiresAuth: true}},
+    {path: '/panel/agregar-juego',        component: CreateGame, meta: {requiresAuth: true}},
 ]
 
 const router = createRouter({

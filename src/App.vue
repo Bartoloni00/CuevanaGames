@@ -41,7 +41,9 @@ export default {
         <template v-else>
             <!-- <li><router-link to="/chat">Chat</router-link></li> -->
             <li><router-link to="/perfil">Mi perfil</router-link></li>
-            <li><router-link to="/usuario/jsIMvySMeQfC0XzylbjqMJlJcX42/chat">Contactar</router-link></li>
+            <template v-if="user.rol !== 'admin'">
+                <li><router-link to="/usuario/jsIMvySMeQfC0XzylbjqMJlJcX42/chat">Contactar</router-link></li>
+            </template>
             <template v-if="user.rol === 'admin'">
                 <li><router-link to="/panel">panel</router-link></li>
             </template>

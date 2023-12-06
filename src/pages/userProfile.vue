@@ -1,10 +1,11 @@
 <script>
 import BaseLoader from '../components/BaseLoader.vue';
+import PrincipalTitle from '../components/PrincipalTitle.vue';
 import { getUserById } from '../services/user';
 
 export default {
     name: 'UserProfile',
-    components: { BaseLoader },
+    components: { BaseLoader, PrincipalTitle },
     data() {
         return {
             loadingProfile: true,
@@ -30,7 +31,7 @@ export default {
         <BaseLoader />
     </template>
     <template v-else>
-        <h1>Perfil Del usuario: {{ userProfile.email }}</h1>
+        <PrincipalTitle>Perfil Del usuario: {{ userProfile.email }}</PrincipalTitle>
 
         <router-link :to="`/usuario/${userProfile.id}/chat`" class="bg-yellow-700 px-2 py-1 m-2 rounded-md">Iniciar chat</router-link>
     </template>

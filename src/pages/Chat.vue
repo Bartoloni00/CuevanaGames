@@ -5,9 +5,10 @@ import { formatDate } from '../helpers/date.js'
 import BaseLabel from '../components/BaseLabel.vue'
 import BaseButton from '../components/BaseButton.vue'
 import BaseLoader from '../components/BaseLoader.vue'
+import PrincipalTitle from '../components/PrincipalTitle.vue'
 export default {
     name: 'Chat',
-    components: { BaseButton, BaseLabel, BaseLoader },
+    components: { BaseButton, BaseLabel, BaseLoader, PrincipalTitle },
     data() {
         return {
             loadingMessages: true,
@@ -58,7 +59,7 @@ export default {
 }
 </script>
 <template>
-    <h1 class="mb-4 text-3xl">Impresionante chat en tiempo real</h1>
+    <PrincipalTitle>Impresionante chat en tiempo real</PrincipalTitle>
         <div class="flex gap-4 w-full justify-between">
             <div>
                 <template v-if="this.loadingMessages">
@@ -66,13 +67,13 @@ export default {
                 </template>
                 <template v-else>
                     <div v-for="message in messages" class="mb-2">
-                    <div>
-                        <b>Usuario: </b> 
-                        <router-link :to="`/usuario/${message.userId}`" class="text-blue-600">{{ message.user }}</router-link>
+                        <div>
+                            <b>Usuario: </b> 
+                            <router-link :to="`/usuario/${message.userId}`" class="text-blue-600">{{ message.user }}</router-link>
+                        </div>
+                        <div><b>Mensaje:</b> {{ message.message }}</div>
+                        <div class="text-right">{{ dateToString(message.created_at) }}</div>
                     </div>
-                    <div><b>Mensaje:</b> {{ message.message }}</div>
-                    <div class="text-right">{{ dateToString(message.created_at) }}</div>
-                </div>
                 </template>
             </div>
             <form action="#" @submit.prevent="sendMessage" class="min-w-[320px]">

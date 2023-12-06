@@ -1,8 +1,11 @@
 <script>
+import PrincipalTitle from '../components/PrincipalTitle.vue';
+
 export default {
-    name: 'Home'
+    name: 'Home',
+    components: { PrincipalTitle }
 }
 </script>
 <template>
-    <h1 class="mb-4 text-3-l">'hola soy la home'</h1>
+    <PrincipalTitle></PrincipalTitle>
 </template>

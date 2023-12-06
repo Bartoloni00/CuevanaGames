@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-     <form action="" class="max-w-[520px]" @submit.prevent="handleLogin">
+     <form action="" class="max-w-[520px] m-auto" @submit.prevent="handleLogin">
         <div>
             <BaseLabel for="email">Email</BaseLabel>
             <BaseInput 

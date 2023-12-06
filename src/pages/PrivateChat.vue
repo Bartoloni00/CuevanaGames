@@ -6,10 +6,11 @@ import { getUserById } from '../services/user.js';
 import { subscribeToAuth } from '../services/auth.js';
 import { formatDate } from '../helpers/date.js'
 import {sendPrivateMessage, subscribeToPrivateChat} from '../services/private-chat.js'
+import PrincipalTitle from '../components/PrincipalTitle.vue';
 
 export default {
     name: 'PrivateChat',
-    components: { BaseLoader, BaseLabel, BaseButton },
+    components: { BaseLoader, BaseLabel, BaseButton, PrincipalTitle },
     data(){
         return {
             loadingMessages: true,
@@ -63,7 +64,7 @@ export default {
 </script>
 <template>
     <template v-if="!loadingProfile">
-        <h1>Chat privado con: {{ userProfile.email }}</h1>
+        <PrincipalTitle>Chat privado con: {{ userProfile.email }}</PrincipalTitle>
         <section>
             <h2>Mensajes</h2>
             <template v-if="this.loadingMessages">

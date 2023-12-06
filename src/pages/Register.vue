@@ -2,11 +2,12 @@
 import BaseButton from '../components/BaseButton.vue';
 import BaseLabel from '../components/BaseLabel.vue'
 import BaseInput from '../components/BaseInput.vue'
+import PrincipalTitle from '../components/PrincipalTitle.vue'
 import {register} from '../services/auth.js'
 
 export default {
     name: 'Register',
-    components: { BaseButton, BaseLabel, BaseInput },
+    components: { BaseButton, BaseLabel, BaseInput,PrincipalTitle },
     data(){
         return {
             processingLogin: false,
@@ -32,8 +33,8 @@ export default {
 </script>
 
 <template>
-    <h1 class="mb-4">Register</h1>
-    <form action="" class="max-w-[520px]" @submit.prevent="handleSubmit">
+    <PrincipalTitle>Registrate</PrincipalTitle>
+    <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleSubmit">
         <div>
             <BaseLabel for="email">Email</BaseLabel>
             <BaseInput 

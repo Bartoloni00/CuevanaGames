@@ -1,6 +1,7 @@
 <script>
 import {subscribeToAuth} from '../services/auth.js'
 import BaseLoader from '../components/BaseLoader.vue'
+import PrincipalTitle from '../components/PrincipalTitle.vue'
 
 export default {
     name: 'MyProfile',
@@ -23,11 +24,11 @@ export default {
     unmounted() {
         this.authUnsubscribe = () => { };
     },
-    components: { BaseLoader }
+    components: { BaseLoader,PrincipalTitle }
 }
 </script>
 <template>
-    <h1>Mi perfil</h1>
+    <PrincipalTitle>Mi perfil</PrincipalTitle>
     <template v-if="!loadingUser">
         <div>
             <span class="block">Email: {{ user.email }}</span>

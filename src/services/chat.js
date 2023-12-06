@@ -1,4 +1,5 @@
-import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp } from "firebase/firestore"
+import { addDoc, collection, onSnapshot, orderBy, query, serverTimestamp, getDocs, where } from "firebase/firestore"
+// import { db, query, where, getDocs } from 'firebase/firestore';
 import { db } from "./firebase.js"
 const refChat = collection(db, 'chat')
 
@@ -25,4 +26,26 @@ export function chatSubscribeToMessage(callback)
         })
         callback(messages)
     })
+}
+
+
+export async function getPrivateChatsForUser(userId, callback) {
+    const q = query(
+        collection(db, 'private-chats'),
+        where(`users.${userId}`, '==', true)
+    );
+
+    const querySnapshot = await getDocs(q);
+    const userIds = [];
+
+    querySnapshot.forEach((doc) => {
+        const users = doc.data().Users;
+        Object.keys(users).forEach((key) => {
+            if (key !== userId && !userIds.includes(key)) {
+                userIds.push(key);
+            }
+        });
+    });
+
+    callback(userIds);
 }
