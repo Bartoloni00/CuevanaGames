@@ -10,10 +10,12 @@ import UserProfile from '../pages/UserProfile.vue'
 import PrivateChat from '../pages/PrivateChat.vue'
 import DashBoard from '../pages/DashBoard.vue'
 import CreateGame from '../pages/CreateGame.vue'
+import GameDetails from '../pages/GameDetails.vue'
 
 const routes = [
     {path: '/',              component: Home,},
     {path: '/tienda', component: Store,},
+    {path: '/tienda/:id/', component: GameDetails,},
     // {path: '/chat',          component: Chat, meta: {requiresAuth: true}},
     {path: '/login',         component: Login,},
     {path: '/registrarse',   component: Register,},

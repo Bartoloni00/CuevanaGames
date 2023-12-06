@@ -1,6 +1,6 @@
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs, getDoc, doc } from 'firebase/firestore';
 import {db} from './firebase'
-const gamesRef = collection(db, 'games'); // Referencia a la colección "games"
+const gamesRef = collection(db, 'games')
 
 export async function createGame({ title, description, price }) {
     // Verifica si los campos obligatorios están definidos
@@ -34,5 +34,25 @@ export async function getAllGames() {
     } catch (e) {
         console.error('Error fetching games:', e);
         throw new Error('Error al obtener la lista de juegos');
+    }
+}
+
+export async function getGameById(gameId) {
+    try {
+        const gameDoc = await getDoc(doc(gamesRef, gameId));
+
+        if (gameDoc.exists()) {
+            return {
+                id: gameDoc.id,
+                title: gameDoc.data().title,
+                description: gameDoc.data().description,
+                price: gameDoc.data().price,
+            };
+        } else {
+            throw new Error(`No se encontró ningún juego con el ID: ${gameId}`);
+        }
+    } catch (e) {
+        console.error(`Error fetching game with ID ${gameId}:`, e);
+        throw new Error(`Error al obtener el juego con ID ${gameId}`);
     }
 }
