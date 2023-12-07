@@ -48,7 +48,7 @@ export default {
 </script>
 
 <template>
-    <div class="max-w-2xl mx-auto mt-8">
+    <div class="mx-auto mt-8">
       <PrincipalTitle>Dashboard</PrincipalTitle>
   
       <!-- Sección de agregar juego -->
@@ -73,8 +73,8 @@ export default {
                   <td class="border px-4 py-2">{{ game.id }}</td>
                   <td class="border px-4 py-2">{{ game.title }}</td>
                   <td class="border px-4 py-2">
-                    <button class="text-blue-500 hover:underline mr-2 border border-blue-500 rounded-lg p-1">Editar</button>
-                    <button class="text-red-500 hover:underline border border-red-500 rounded-lg p-1">Eliminar</button>
+                    <!-- <router-link :to="`/panel/editar-juego/${game.id}`" class="text-blue-500 hover:underline mr-2 border border-blue-500 rounded-lg p-1">Editar</router-link> -->
+                    <router-link :to="`/panel/eliminar-juego/${game.id}`" class="text-red-500 hover:underline border border-red-500 rounded-lg p-1">Eliminar</router-link>
                   </td>
                 </tr>
               </tbody>

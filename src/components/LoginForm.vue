@@ -23,7 +23,7 @@ export default {
             this.processingLogin = true
             // console.log('ejecutando el login:', this.form);
             login({...this.form})
-            .then(user => {
+            .then(() => {
                 // Redireccionamos al perfil.
                 this.$router.push({path: '/perfil'})
             })
@@ -33,7 +33,7 @@ export default {
 </script>
 
 <template>
-     <form action="" class="max-w-[520px] m-auto" @submit.prevent="handleLogin">
+     <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleLogin">
         <div>
             <BaseLabel for="email">Email</BaseLabel>
             <BaseInput 

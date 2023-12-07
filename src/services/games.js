@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, getDoc, doc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, getDoc, doc, deleteDoc } from 'firebase/firestore';
 import {db} from './firebase'
 const gamesRef = collection(db, 'games')
 
@@ -54,5 +54,15 @@ export async function getGameById(gameId) {
     } catch (e) {
         console.error(`Error fetching game with ID ${gameId}:`, e);
         throw new Error(`Error al obtener el juego con ID ${gameId}`);
+    }
+}
+
+export async function deleteGameById(gameId) {
+    try {
+        await deleteDoc(doc(gamesRef, gameId));
+        console.log(`Juego con ID ${gameId} eliminado correctamente.`);
+    } catch (e) {
+        console.error(`Error deleting game with ID ${gameId}:`, e);
+        throw new Error(`Error al eliminar el juego con ID ${gameId}`);
     }
 }

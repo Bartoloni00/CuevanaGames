@@ -4,6 +4,7 @@ import BaseLabel from '../components/BaseLabel.vue'
 import BaseInput from '../components/BaseInput.vue'
 import PrincipalTitle from '../components/PrincipalTitle.vue';
 import { createGame } from '../services/games.js';
+import { subscribeToAuth } from '../services/auth.js'
 
 export default {
     name: 'CreateGame',
@@ -14,8 +15,14 @@ export default {
             newGame: {
                 title: '',
                 description: '',
-                price: 0,
-            }
+                price: null,
+            },
+            user: {
+                id: null,
+                email: null,
+                rol: null,
+            },
+            authUnsubscribe: () => {},
         }
     },
     methods: {
@@ -29,17 +36,27 @@ export default {
                 this.newGame = {
                 title: '',
                 description: '',
-                price: 0,
+                price: null,
             };
+            this.$router.push({path: '/panel'})
             });
+            
         },
-    } 
+    },
+    mounted(){
+        this.authUnsubscribe = subscribeToAuth(newUser => {
+            this.user = newUser;
+            });
+    },
+    unmounted() {
+        this.authUnsubscribe();
+    },
 }
 </script>
 
 <template>
     <PrincipalTitle>Agregar Juego</PrincipalTitle>
-    <form action="" class="max-w-[520px] m-auto" @submit.prevent="createGame">
+    <form action="#" class="max-w-[520px] m-auto" @submit.prevent="createGame">
         <div>
             <BaseLabel for="title">Titulo</BaseLabel>
             <BaseInput 

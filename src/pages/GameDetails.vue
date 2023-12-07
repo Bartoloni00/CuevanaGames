@@ -1,10 +1,11 @@
 <script>
+import BaseLoader from '../components/BaseLoader.vue';
 import PrincipalTitle from '../components/PrincipalTitle.vue';
 import {getGameById} from '../services/games.js'
 
     export default {
     name: 'GameDetails',
-    components: { PrincipalTitle },
+    components: { PrincipalTitle, BaseLoader },
     data(){
         return {
             loadingGame: true,
@@ -36,5 +37,7 @@ import {getGameById} from '../services/games.js'
                 </div>
             </div>
         </template>
-    <template></template>
+    <template v-else>
+        <BaseLoader/>
+    </template>
 </template>
