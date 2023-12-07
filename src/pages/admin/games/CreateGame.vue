@@ -1,10 +1,10 @@
 <script>
-import BaseButton from '../components/BaseButton.vue';
-import BaseLabel from '../components/BaseLabel.vue'
-import BaseInput from '../components/BaseInput.vue'
-import PrincipalTitle from '../components/PrincipalTitle.vue';
-import { createGame } from '../services/games.js';
-import { subscribeToAuth } from '../services/auth.js'
+import BaseButton from '../../../components/BaseButton.vue';
+import BaseLabel from '../../../components/BaseLabel.vue'
+import BaseInput from '../../../components/BaseInput.vue'
+import PrincipalTitle from '../../../components/PrincipalTitle.vue';
+import { createGame } from '../../../services/games.js';
+import { subscribeToAuth } from '../../../services/auth.js'
 
 export default {
     name: 'CreateGame',
@@ -26,23 +26,34 @@ export default {
         }
     },
     methods: {
-        createGame() {
-            createGame({
-                title: this.newGame.title,
-                description: this.newGame.description,
-                price: this.newGame.price,
-            })
-                .then(() => {
+    createGame() {
+        if (this.processingLogin) return;
+
+        this.processingLogin = true;
+
+        const gameData = {
+            title: this.newGame.title,
+            description: this.newGame.description,
+            price: this.newGame.price,
+        };
+
+        createGame(gameData)
+            .then(() => {
                 this.newGame = {
-                title: '',
-                description: '',
-                price: null,
-            };
-            this.$router.push({path: '/panel'})
+                    title: '',
+                    description: '',
+                    price: null,
+                };
+                this.processingLogin = false; // Asegúrate de restablecer el estado después de la llamada exitosa
+                this.$router.push({ path: '/panel' });
+            })
+            .catch((error) => {
+                console.error('Error al agregar el juego:', error);
+                this.processingLogin = false; // Asegúrate de restablecer el estado en caso de error
             });
-            
-        },
     },
+},
+
     mounted(){
         this.authUnsubscribe = subscribeToAuth(newUser => {
             this.user = newUser;

@@ -8,10 +8,11 @@ import Register from '../pages/Register.vue'
 import MyProfile from '../pages/MyProfile.vue'
 import UserProfile from '../pages/UserProfile.vue'
 import PrivateChat from '../pages/PrivateChat.vue'
-import DashBoard from '../pages/DashBoard.vue'
-import CreateGame from '../pages/CreateGame.vue'
+import DashBoard from '../pages/admin/DashBoard.vue'
+import CreateGame from '../pages/admin/games/CreateGame.vue'
 import GameDetails from '../pages/GameDetails.vue'
-import DeleteGame from '../pages/DeleteGame.vue'
+import DeleteGame from '../pages/admin/games/DeleteGame.vue'
+import EditGame from '../pages/admin/games/EditGame.vue'
 
 const routes = [
     {path: '/', component: Home,},
@@ -24,6 +25,7 @@ const routes = [
     {path: '/usuario/:id/chat', component: PrivateChat, meta: {requiresAuth: true}},
     {path: '/panel', component: DashBoard, meta: {requiresAuth: true}},
     {path: '/panel/eliminar-juego/:id', component: DeleteGame, meta: {requiresAuth: true}},
+    {path: '/panel/editar-juego/:id', component: EditGame, meta: {requiresAuth: true}},
     {path: '/panel/agregar-juego', component: CreateGame, meta: {requiresAuth: true}},
 ]
 

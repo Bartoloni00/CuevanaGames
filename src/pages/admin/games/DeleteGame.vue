@@ -1,9 +1,9 @@
 <script>
-import BaseButton from '../components/BaseButton.vue';
-import BaseLoader from '../components/BaseLoader.vue';
-import PrincipalTitle from '../components/PrincipalTitle.vue';
-import { subscribeToAuth } from '../services/auth.js';
-import { getGameById, deleteGameById } from '../services/games.js';
+import BaseButton from '../../../components/BaseButton.vue';
+import BaseLoader from '../../../components/BaseLoader.vue';
+import PrincipalTitle from '../../../components/PrincipalTitle.vue';
+import { subscribeToAuth } from '../../../services/auth.js';
+import { getGameById, deleteGameById } from '../../../services/games.js';
 
     export default {
         name: 'DeleteGame',

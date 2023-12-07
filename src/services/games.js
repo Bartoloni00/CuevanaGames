@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, getDoc, doc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs, getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
 import {db} from './firebase'
 const gamesRef = collection(db, 'games')
 
@@ -64,5 +64,20 @@ export async function deleteGameById(gameId) {
     } catch (e) {
         console.error(`Error deleting game with ID ${gameId}:`, e);
         throw new Error(`Error al eliminar el juego con ID ${gameId}`);
+    }
+}
+
+export async function updateGameById(gameId, { title, description, price }) {
+    try {
+        const gameRef = doc(gamesRef, gameId);
+        await updateDoc(gameRef, {
+            title: title,
+            description: description,
+            price: price
+        });
+        console.log(`Juego con ID ${gameId} actualizado correctamente.`);
+    } catch (e) {
+        console.error(`Error updating game with ID ${gameId}:`, e);
+        throw new Error(`Error al actualizar el juego con ID ${gameId}`);
     }
 }

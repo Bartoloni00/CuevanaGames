@@ -1,10 +1,10 @@
 <script>
-import { getPrivateChatsForUser } from '../services/chat.js'
-import { subscribeToAuth } from '../services/auth.js'
-import { getAllGames } from '../services/games.js';
+import { getPrivateChatsForUser } from '../../services/chat.js'
+import { subscribeToAuth } from '../../services/auth.js'
+import { getAllGames } from '../../services/games.js';
 
-import PrincipalTitle from '../components/PrincipalTitle.vue'
-import BaseLoader from '../components/BaseLoader.vue'
+import PrincipalTitle from '../../components/PrincipalTitle.vue'
+import BaseLoader from '../../components/BaseLoader.vue'
 
 export default {
     name: 'DashBoard',
@@ -52,7 +52,7 @@ export default {
       <PrincipalTitle>Dashboard</PrincipalTitle>
   
       <!-- Sección de agregar juego -->
-      <router-link to="/panel/agregar-juego" class="text-blue-500">Agregar Juego</router-link>
+      <router-link to="/panel/agregar-juego" class="text-green-500 hover:underline border border-green-500 rounded-lg p-1">Agregar Juego</router-link>
   
       <div class="flex mt-4">
         <!-- Columna de Games -->
@@ -73,7 +73,7 @@ export default {
                   <td class="border px-4 py-2">{{ game.id }}</td>
                   <td class="border px-4 py-2">{{ game.title }}</td>
                   <td class="border px-4 py-2">
-                    <!-- <router-link :to="`/panel/editar-juego/${game.id}`" class="text-blue-500 hover:underline mr-2 border border-blue-500 rounded-lg p-1">Editar</router-link> -->
+                    <router-link :to="`/panel/editar-juego/${game.id}`" class="text-blue-500 hover:underline mr-2 border border-blue-500 rounded-lg p-1">Editar</router-link>
                     <router-link :to="`/panel/eliminar-juego/${game.id}`" class="text-red-500 hover:underline border border-red-500 rounded-lg p-1">Eliminar</router-link>
                   </td>
                 </tr>
