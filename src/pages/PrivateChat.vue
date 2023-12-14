@@ -71,7 +71,9 @@ export default {
     <section>
       <h2>Mensajes</h2>
       <template v-if="this.loadingMessages">
-        <BaseLoader />
+        <div class="flex justify-center items-center w-screen h-screen">
+          <BaseLoader />
+        </div>
       </template>
       <template v-else>
         <div

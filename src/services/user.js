@@ -1,5 +1,5 @@
 import { db } from "./firebase";
-import { doc, getDoc, setDoc, getDocs, collection } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/firestore";
 
 /**
  *
@@ -37,4 +37,17 @@ export async function createUserProfile(id, data) {
   // Firestore organiza sus documentos y collecciones en formato URL.
   const userRef = doc(db, `/users/${id}`);
   return setDoc(userRef, data);
+}
+
+/**
+ * 
+ * @param {string} id
+ * @param {{displayName: string|null}} data 
+ * @return {Promise}
+ */
+export async function editUserProfile(id, data){
+  return updateDoc(
+    doc(db, `/users/${id}`),
+    data
+  )
 }

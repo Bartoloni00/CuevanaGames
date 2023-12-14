@@ -1,12 +1,13 @@
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
 import { auth,db } from './firebase.js'
-import { createUserProfile } from "./user.js"
+import { createUserProfile, editUserProfile } from "./user.js"
 import { doc, getDoc } from 'firebase/firestore'
 
 let userData = {
     id: null,
     email: null,
     rol: null,
+    displayName: null,
 }
 let observers = []
 
@@ -41,6 +42,7 @@ onAuthStateChanged(auth, async user => {
                 id: user.uid,
                 email: user.email,
                 rol: profile.rol, // ahora accedemos al rol desde la data del perfil
+                displayName: profile.displayName
             };
             localStorage.setItem('userData', JSON.stringify(userData));
             notifyAll();
@@ -50,10 +52,39 @@ onAuthStateChanged(auth, async user => {
             id: null,
             email: null,
             rol: null,
+            displayName: null,
         };
         localStorage.removeItem('userData');
     }
 })
+
+/**
+ * 
+ * @param {{displayName || string|null}} data 
+ * @return {Promise}
+ */
+export async function editUser({displayName}){
+    try {
+        // Actualizamos los datos en Auth
+        const promiseAuth = updateProfile(auth.currentUser, {
+            displayName
+        })
+        // Actualizamos los datos en DB
+        const promiseProfile = editUserProfile(userData.id,{displayName})
+
+        userData = {
+            ...userData,
+            displayName
+        }
+
+        localStorage.setItem('user', JSON.stringify(userData))
+        notifyAll()
+        // Promise.all : esto sirve para utilizar varias promesas en paralelo que no se ven afectadas entre si
+        return Promise.all([promiseAuth, promiseProfile]) 
+    } catch (error) {
+        throw error
+    }
+}
 
 export async function register({email,password}) {
     try {

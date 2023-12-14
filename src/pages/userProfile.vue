@@ -4,26 +4,26 @@ import PrincipalTitle from '../components/PrincipalTitle.vue';
 import { getUserById } from '../services/user';
 
 export default {
-    name: 'UserProfile',
-    components: { BaseLoader, PrincipalTitle },
-    data() {
-        return {
-            loadingProfile: true,
-            userProfile: {
-                id: null,
-                email: null
-            }
-        };
-    },
-    async mounted() {
-        this.loadingProfile = true;
-        const userData = await getUserById(this.$route.params.id);
-        this.userProfile = {
-            id: userData.id,
-            email: userData.email
-        }
-        this.loadingProfile = false;
-    },
+  name: 'UserProfile',
+  components: { BaseLoader, PrincipalTitle },
+  data() {
+      return {
+          loadingProfile: true,
+          userProfile: {
+              id: null,
+              email: null
+          }
+      };
+  },
+  async mounted() {
+      this.loadingProfile = true;
+      const userData = await getUserById(this.$route.params.id);
+      this.userProfile = {
+          id: userData.id,
+					email: userData.email
+      }
+      this.loadingProfile = false;
+  },
 }
 </script>
 <template>

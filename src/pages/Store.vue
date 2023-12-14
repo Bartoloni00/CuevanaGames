@@ -17,7 +17,7 @@ export default {
     getAllGames()
       .then((allGames) => {
         this.games = allGames;
-        this.loadingGames = false;
+        this.loadingGames = ss;
       })
       .catch((error) => {
         console.error("Error fetching games:", error);
@@ -30,7 +30,9 @@ export default {
   <div>
     <PrincipalTitle>Compra los mejores juegos en CuevanaGames</PrincipalTitle>
     <template v-if="loadingGames">
-      <BaseLoader />
+      <div class="flex justify-center items-center w-full">
+        <BaseLoader />
+      </div>
     </template>
     <template v-else>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
