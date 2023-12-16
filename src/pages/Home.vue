@@ -1,10 +1,5 @@
-<script>
+<script setup>
 import BaseButton from "../components/BaseButton.vue";
-
-export default {
-  name: "Home",
-  components: { BaseButton },
-};
 </script>
 <template>
   <div class="container mx-auto px-4">

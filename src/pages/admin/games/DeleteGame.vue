@@ -1,50 +1,59 @@
-<script>
+<script setup>
+import { onMounted, onUnmounted, ref } from 'vue';
 import BaseButton from '../../../components/BaseButton.vue';
 import BaseLoader from '../../../components/BaseLoader.vue';
 import PrincipalTitle from '../../../components/PrincipalTitle.vue';
 import { subscribeToAuth } from '../../../services/auth.js';
 import { getGameById, deleteGameById } from '../../../services/games.js';
+import { useRoute,useRouter } from 'vue-router';
 
-    export default {
-        name: 'DeleteGame',
-        components:{ PrincipalTitle, BaseLoader, BaseButton },
-        data(){
-            return {
-                loadingGame: true,
-                user: {
-                    id: null,
-                    email: null,
-                    rol: null,
-                },
-                authUnsubscribe: () => {},
-                game: {
-                    id: null,
-                    title: null,
-                    description: null,
-                    price: null
-                }
-            }
-        },
-        methods:{
-            deleteGame(){
-                deleteGameById(this.$route.params.id)
+const {
+    loadingGame,
+    user,
+    game,
+    deleteGame,
+} = useDeleteGame()
+
+function useDeleteGame () {
+    const route = useRoute() // obtener los parametros
+const router = useRouter() // redireccionar
+const loadingGame = ref(true)
+const user = ref({
+    id:null,
+    email:null,
+    rol:null
+})
+const game = ref({
+    id: null,
+    title: null,
+    description: null,
+    price: null
+})
+let authUnsubscribe
+
+const deleteGame = () => {
+    deleteGameById(route.params.id)
                 .then(
-                    this.$router.push({path: '/panel'})
+                    router.push({path: '/panel'})
                 )
-            }
-        },
-        async mounted(){
-            this.authUnsubscribe = subscribeToAuth(newUser => {
-            this.user = newUser
+}
+onMounted(async ()=>{
+    authUnsubscribe = subscribeToAuth(newUser => {
+            user.value = newUser
             })
-            this.loadingGame = true
-            this.game = await getGameById(this.$route.params.id)
-            this.loadingGame = false
-        },
-        unmounted(){
-            this.authUnsubscribe()
-        }
-    }
+            loadingGame.value = true
+            game.value = await getGameById(route.params.id)
+            loadingGame.value = false
+})
+onUnmounted(()=>authUnsubscribe())
+
+return {
+    loadingGame,
+    user,
+    game,
+    deleteGame,
+}
+}
 </script>
 <template>
     <PrincipalTitle>¿Esta seguro de querer eliminar el juego: <b>{{ loadingGame ?'...cargando juego': game.title}}</b>?</PrincipalTitle>

@@ -1,50 +1,73 @@
-<script>
-import { getPrivateChatsForUser } from "../../services/chat.js";
+<script setup>
 import { subscribeToAuth } from "../../services/auth.js";
 import { getAllGames } from "../../services/games.js";
 import { getAllUsers } from "../../services/user.js";
 
 import PrincipalTitle from "../../components/PrincipalTitle.vue";
 import BaseLoader from "../../components/BaseLoader.vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
-export default {
-  name: "DashBoard",
-  data() {
-    return {
-      loadingUser: true,
-      loadingChats: false,
-      loadingGames: true,
-      chats: [],
-      games: [],
-      user: {
-        id: null,
-        email: null,
-        rol: null,
-      },
-      authUnsubscribe: () => {},
-      chatsUnsubscribe: () => {},
-    };
-  },
-  async mounted() {
-    this.loadingChats = true;
-    this.authUnsubscribe = subscribeToAuth((newUser) => {
-      this.user = newUser;
+const {user} = useUser() // esta linea es importante
+const {loadingChats, chats} = useChats()
+const {loadingGames, games} = useGames()
+
+
+function useUser () {
+  const user = ref({
+  id: null,
+  email: null,
+  rol: null,
+})
+let  authUnsubscribe;
+
+onMounted(async()=>{
+  authUnsubscribe = subscribeToAuth((newUser) => {
+      user.value = newUser;
     });
-    this.loadingGames = true;
-    getAllGames().then((allGames) => {
-      this.games = allGames;
-      this.loadingGames = false;
-    });
+})
+onUnmounted(() => authUnsubscribe())
+return {
+  user,
+}
+}
+
+function useChats () {
+  const loadingChats = ref(false)
+  const chats = ref([])
+
+  onMounted(async()=>{
+    loadingChats.value = true;
     getAllUsers().then((allChats) => {
-      this.chats = allChats;
-      this.loadingChats = false;
+      chats.value = allChats;
+      loadingChats.value = false;
     });
-  },
-  unmounted() {
-    this.authUnsubscribe();
-  },
-  components: { PrincipalTitle, BaseLoader },
-};
+  })
+
+  return {
+    loadingChats,
+    chats,
+  }
+}
+
+function useGames () {
+const loadingGames = ref(true)
+const games = ref([])
+
+onMounted(async () => {
+    loadingGames.value = true;
+    getAllGames().then((allGames) => {
+      games.value = allGames;
+      loadingGames.value = false;
+    });
+    
+})
+
+return {
+  loadingGames,
+  games
+}
+}
+
 </script>
 
 <template>

@@ -1,10 +1,6 @@
-<script>
+<script setup>
 import LoginForm from '../components/LoginForm.vue';
 import PrincipalTitle from '../components/PrincipalTitle.vue';
-export default {
-  name: 'Login',
-  components: { LoginForm, PrincipalTitle },
-}
 </script>
 
 <template>

@@ -1,30 +1,48 @@
-<script>
+<script setup>
+import { onMounted, onUnmounted, ref } from "vue";
 import { subscribeToAuth, logout } from "./services/auth.js";
-export default {
-  name: "App",
-  data() {
-    return {
-      user: {
-        id: null,
-        email: null,
-        rol: null,
-      },
-    };
-  },
-  methods: {
-    handleLogout() {
-      logout();
-      this.$router.push({ path: "/login" });
-    },
-  },
-  mounted() {
-    subscribeToAuth((newUserData) => {
-      this.user = {
+import { useRouter } from "vue-router";
+
+const {handleLogout} = useLogOut()
+const {user} = useAuth()
+
+function useLogOut(){
+  const router = useRouter()
+  const handleLogout = () => {
+    logout();
+        router.push({ path: "/login" });
+  }
+
+  return {
+    handleLogout,
+  }
+}
+
+function useAuth(){
+  const user = ref({
+  id: null,
+  email: null,
+  rol: null,
+})
+
+let authUnsubscribe
+
+onMounted(() => {
+    authUnsubscribe = subscribeToAuth((newUserData) => {
+      user.value = {
         ...newUserData,
-      };
-    });
-  },
-};
+      }
+    })
+  })
+
+onUnmounted(() => authUnsubscribe())
+
+return {
+  user,
+}
+}
+
+
 </script>
 <template>
   <header
@@ -46,7 +64,6 @@ export default {
           </li>
         </template>
         <template v-else>
-          <!-- <li class="hover:text-white"><router-link to="/chat">Chat</router-link></li> -->
           <li class="hover:text-white">
             <router-link to="/perfil">Mi perfil</router-link>
           </li>

@@ -1,73 +1,82 @@
-<script>
+<script setup>
 import BaseButton from '../../../components/BaseButton.vue';
 import BaseLabel from '../../../components/BaseLabel.vue'
 import BaseInput from '../../../components/BaseInput.vue'
 import PrincipalTitle from '../../../components/PrincipalTitle.vue';
 import { createGame } from '../../../services/games.js';
 import { subscribeToAuth } from '../../../services/auth.js'
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-export default {
-    name: 'CreateGame',
-    components: { BaseButton, BaseLabel, BaseInput, PrincipalTitle },
-    data(){
-        return {
-            processingLogin: false,
-            newGame: {
+const {
+    handleCreateGame,
+    processingForm,
+    user,
+    newGame,
+} = useCreateGame()
+
+function useCreateGame () {
+    const router = useRouter()
+
+const processingForm = ref(false)
+const newGame = ref({
                 title: '',
                 description: '',
                 price: null,
-            },
-            user: {
+            })
+const user = ref({
                 id: null,
                 email: null,
                 rol: null,
-            },
-            authUnsubscribe: () => {},
-        }
-    },
-    methods: {
-    createGame() {
-        if (this.processingLogin) return;
-
-        this.processingLogin = true;
-
-        const gameData = {
-            title: this.newGame.title,
-            description: this.newGame.description,
-            price: this.newGame.price,
-        };
-
-        createGame(gameData)
-            .then(() => {
-                this.newGame = {
-                    title: '',
-                    description: '',
-                    price: null,
-                };
-                this.processingLogin = false; // Asegúrate de restablecer el estado después de la llamada exitosa
-                this.$router.push({ path: '/panel' });
             })
-            .catch((error) => {
-                console.error('Error al agregar el juego:', error);
-                this.processingLogin = false; // Asegúrate de restablecer el estado en caso de error
-            });
-    },
-},
+let authUnsubscribe
 
-    mounted(){
-        this.authUnsubscribe = subscribeToAuth(newUser => {
-            this.user = newUser;
+const handleCreateGame = () => {
+    if (processingForm.value) return;
+
+    processingForm.value = true;
+
+    const gameData = {
+        title: newGame.value.title,
+        description: newGame.value.description,
+        price: newGame.value.price,
+    };
+
+    createGame(gameData)
+        .then(() => {
+            newGame.value = {
+                title: '',
+                description: '',
+                price: null,
+            };
+            processingForm.value = false; // Asegúrate de restablecer el estado después de la llamada exitosa
+            router.push({ path: '/panel' });
+        })
+        .catch((error) => {
+            console.error('Error al agregar el juego:', error);
+            processingForm.value = false; // Asegúrate de restablecer el estado en caso de error
+        });
+}
+onMounted(()=>{
+    authUnsubscribe = subscribeToAuth(newUser => {
+            user.value = newUser;
             });
-    },
-    unmounted() {
-        this.authUnsubscribe();
-    },
+})
+
+onUnmounted(()=>authUnsubscribe())
+
+return {
+    handleCreateGame,
+    processingForm,
+    user,
+    newGame,
+}
 }
 </script>
 
 <template>
     <PrincipalTitle>Agregar Juego</PrincipalTitle>
-    <form action="#" class="max-w-[520px] m-auto" @submit.prevent="createGame">
+    <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleCreateGame">
         <div>
             <BaseLabel for="title">Titulo</BaseLabel>
             <BaseInput 
@@ -92,6 +101,6 @@ export default {
                 v-model="newGame.price"
             />
         </div>
-        <BaseButton :loading="processingLogin">Agregar juego</BaseButton>
+        <BaseButton :loading="processingForm">Agregar juego</BaseButton>
     </form>
 </template>

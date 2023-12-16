@@ -1,71 +1,88 @@
-<script>
+<script setup>
 import BaseButton from '../../../components/BaseButton.vue';
 import BaseLabel from '../../../components/BaseLabel.vue'
 import BaseInput from '../../../components/BaseInput.vue'
 import PrincipalTitle from '../../../components/PrincipalTitle.vue';
 import { subscribeToAuth } from '../../../services/auth.js'
 import { getGameById, updateGameById } from '../../../services/games.js'
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useRouter,useRoute } from 'vue-router';
 
-export default {
-    name: 'EditGame',
-    components: { BaseButton, BaseLabel, BaseInput, PrincipalTitle },
-    data(){
-        return {
-            loadingGame: true,
-            processingLogin: false,
-            game: {
-                title: null,
-                description: null,
-                id: null,
-                price: null,
-            },
-            user: {
-                id: null,
-                email: null,
-                rol: null,
-            },
-            authUnsubscribe: () => {},
+const {
+    gameName,
+        processingFormEdit,
+        user,
+        game,
+        loadingGame,
+        handleEditGame,
+    } = useEditGame()
+
+function useEditGame () {
+    const router = useRouter()
+    const route = useRoute()
+
+    const loadingGame = ref(true)
+    const processingFormEdit = ref(false)
+    const game = ref({
+                    title: null,
+                    description: null,
+                    id: null,
+                    price: null,
+                })
+    const user = ref({
+                    id: null,
+                    email: null,
+                    rol: null,
+                })
+    let authUnsubscribe
+    const gameName = ref('') 
+
+    const handleEditGame = async () => {
+        if(processingFormEdit.value) return;
+
+        processingFormEdit.value = true;
+
+        const updatedGameData = {
+            title: game.value.title,
+            description: game.value.description,
+            price: game.value.price,
+        };
+
+        try {
+            await updateGameById(game.value.id, updatedGameData);
+            router.push({ path: '/panel' });
+        } catch (error) {
+            console.error('Error al editar el juego:', error);
+        } finally {
+            processingFormEdit.value = false;
         }
-    },
-    methods:{
-        async editGame(){
-            if(this.processingLogin) return;
+    }
 
-            this.processingLogin = true;
+    onMounted(async () => {
+        authUnsubscribe = subscribeToAuth(newUser => {
+                user.value = newUser;
+            })
+            loadingGame.value = true
+            game.value = await getGameById(route.params.id)
+            gameName.value = game.value.title
+            loadingGame.value = false
+    })
+    onUnmounted(()=>authUnsubscribe())
 
-            const updatedGameData = {
-                title: this.game.title,
-                description: this.game.description,
-                price: this.game.price,
-            };
-
-            try {
-                await updateGameById(this.game.id, updatedGameData);
-                this.$router.push({ path: '/panel' });
-            } catch (error) {
-                console.error('Error al editar el juego:', error);
-            } finally {
-                this.processingLogin = false;
-            }
-        }
-    },
-    async mounted(){
-        this.authUnsubscribe = subscribeToAuth(newUser => {
-            this.user = newUser;
-        })
-        this.loadingGame = true
-        this.game = await getGameById(this.$route.params.id)
-        this.loadingGame = false
-    },
-    unmounted(){
-        this.authUnsubscribe()
+    return {
+        gameName,
+        processingFormEdit,
+        user,
+        game,
+        loadingGame,
+        handleEditGame,
     }
 }
 </script>
 
 <template>
-    <PrincipalTitle>Editando el juego: <b>{{ loadingGame ?'...cargando juego': game.title }}</b></PrincipalTitle>
-    <form action="#" class="max-w-[520px] m-auto" @submit.prevent="editGame">
+    <PrincipalTitle>Editando el juego: <b>{{ loadingGame ?'...cargando juego': gameName }}</b></PrincipalTitle>
+    <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleEditGame">
         <div>
             <BaseLabel for="title">Titulo</BaseLabel>
             <BaseInput 
@@ -91,6 +108,6 @@ export default {
                 v-model="game.price"
             />
         </div>
-        <BaseButton :loading="processingLogin">Editar juego: {{ game.title }}</BaseButton>
+        <BaseButton :loading="processingFormEdit">Editar juego: {{ gameName }}</BaseButton>
     </form>
 </template>

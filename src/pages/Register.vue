@@ -1,34 +1,34 @@
-<script>
+<script setup>
 import BaseButton from '../components/BaseButton.vue';
 import BaseLabel from '../components/BaseLabel.vue'
 import BaseInput from '../components/BaseInput.vue'
 import PrincipalTitle from '../components/PrincipalTitle.vue'
 import {register} from '../services/auth.js'
+import {ref} from 'vue'
+import { useRouter } from 'vue-router';
 
-export default {
-    name: 'Register',
-    components: { BaseButton, BaseLabel, BaseInput,PrincipalTitle },
-    data(){
-        return {
-            processingLogin: false,
-            form: {
-                email: '',
-                password: '',
-            }
-        }
-    },
-    methods: {
-        handleSubmit() {
-            if(this.processingLogin) return;
-            this.processingLogin = true
-            register({...this.form})
+const router = useRouter()
+
+const processingRegister = ref(false)
+const form = ref({
+    email: '',
+    password: '',
+})
+
+const handleSubmit = async () => {
+    try {
+        if(processingRegister.value) return;
+            processingRegister.value = true
+            register({...form.value})
             .then(()=>{
-                this.form.email = ''
-                this.form.password = ''
-                this.$router.push({path: '/perfil'})
+                form.email = ''
+                form.password = ''
+                processingRegister.value = false
+                router.push({ path: '/perfil' })
             })
-        }
-    } 
+    } catch (error) {
+        
+    }
 }
 </script>
 
@@ -51,6 +51,6 @@ export default {
                 v-model="form.password"
             />
         </div>
-        <BaseButton :loading="processingLogin">Registrarse</BaseButton>
+        <BaseButton :loading="processingRegister">Registrarse</BaseButton>
     </form>
 </template>

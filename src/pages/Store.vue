@@ -1,30 +1,33 @@
-<script>
+<script setup>
 import PrincipalTitle from "../components/PrincipalTitle.vue";
 import BaseLoader from "../components/BaseLoader.vue";
 import { getAllGames } from "../services/games.js";
+import { onMounted, ref } from "vue";
 
-export default {
-  name: "Store",
-  components: { PrincipalTitle, BaseLoader },
-  data() {
-    return {
-      loadingGames: true,
-      games: [],
-    };
-  },
-  mounted() {
-    this.loadingGames = true;
-    getAllGames()
-      .then((allGames) => {
-        this.games = allGames;
-        this.loadingGames = ss;
-      })
-      .catch((error) => {
-        console.error("Error fetching games:", error);
-        this.loadingGames = false;
-      });
-  },
-};
+const {loadingGames, games} = useGames()
+
+function useGames () {
+  const loadingGames = ref(true)
+  const games = ref([])
+
+  onMounted(async () => {
+    loadingGames.value = true;
+      getAllGames()
+        .then((allGames) => {
+          games.value = allGames;
+          loadingGames.value = false;
+        })
+        .catch((error) => {
+          console.error(error);
+          loadingGames.value = false;
+        })
+  })
+
+  return {
+    loadingGames,
+    games,
+  }
+}
 </script>
 <template>
   <div>

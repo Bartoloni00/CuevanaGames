@@ -1,30 +1,38 @@
-<script>
+<script setup>
+import { onMounted, ref } from 'vue';
 import BaseLoader from '../components/BaseLoader.vue';
 import PrincipalTitle from '../components/PrincipalTitle.vue';
 import { getUserById } from '../services/user';
+import { useRoute } from 'vue-router';
 
-export default {
-  name: 'UserProfile',
-  components: { BaseLoader, PrincipalTitle },
-  data() {
-      return {
-          loadingProfile: true,
-          userProfile: {
-              id: null,
-              email: null
-          }
-      };
-  },
-  async mounted() {
-      this.loadingProfile = true;
-      const userData = await getUserById(this.$route.params.id);
-      this.userProfile = {
-          id: userData.id,
-					email: userData.email
-      }
-      this.loadingProfile = false;
-  },
+const {loadingProfile, userProfile} = useUserProfile()
+
+function useUserProfile () {
+    const route = useRoute()
+
+    const loadingProfile = ref(true)
+    const userProfile = ref({
+        id: null,
+        email: null
+    })
+
+    // utilizar el ciclo de vida mounted con api composition
+    onMounted(async () => {
+        loadingProfile.value = true;
+        const userData = await getUserById(route.params.id);
+        userProfile.value = {
+            id: userData.id,
+            email: userData.email
+        }
+        loadingProfile.value = false;
+    })
+
+    return {
+        loadingProfile,
+        userProfile,
+    }
 }
+
 </script>
 <template>
     <template v-if="loadingProfile">

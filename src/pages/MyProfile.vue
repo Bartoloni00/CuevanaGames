@@ -1,54 +1,78 @@
-<script>
+<script setup>
 import { editUser, subscribeToAuth } from "../services/auth.js";
 import BaseLoader from "../components/BaseLoader.vue";
 import BaseButton from "../components/BaseButton.vue";
 import BaseLabel from "../components/BaseLabel.vue";
 import PrincipalTitle from "../components/PrincipalTitle.vue";
 import BaseInput from "../components/BaseInput.vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
-export default {
-  name: "MyProfile",
-  data() {
-    return {
-      user: {
-        id: null,
-        email: null,
-        rol: null,
-        displayName: null
-      },
-      loadingUser: true,
-      authUnsubscribe: () => {},
-      editing: false,
-      editData:{
-        displayName: null,
-      },
-      processingEdit: false,
-    };
-  },
-  methods:{
-    handleShowFormEdit(){
-      this.editing = true
-      this.editData.displayName = this.user.displayName
-    },
-    handleCancelEdit(){
-      this.editing = false
-    },
-    async handleEdit(){
-      this.processingEdit = true
-      await editUser(this.editData)
-      this.processingEdit = false
-    },
-  },
-  mounted() {
-    this.loadingUser = true;
-    this.authUnsubscribe = subscribeToAuth((user) => (this.user = user));
-    this.loadingUser = false;
-  },
-  unmounted() {
-    this.authUnsubscribe = () => {};
-  },
-  components: { BaseLoader, PrincipalTitle, BaseButton, BaseLabel, BaseInput },
-};
+const {user, loadingUser} = useUserAuth()
+const {
+    editing,
+    editData,
+    processingEdit,
+    handleShowFormEdit,
+    handleCancelEdit,
+    handleEdit,
+  } = useEditingUser()
+
+function useUserAuth () {
+  const user = ref({
+  id: null,
+  email: null,
+  rol: null,
+  displayName: null
+})
+const loadingUser = ref(true)
+let authUnsubscribe =  () => {}
+
+onMounted(() => {
+    loadingUser.value = true;
+    authUnsubscribe.value = subscribeToAuth((userAuth) => (user.value = userAuth));
+    loadingUser.value = false;
+  })
+
+onUnmounted(() => authUnsubscribe())
+
+return {
+  user,
+  loadingUser
+}
+}
+
+function useEditingUser () {
+  const editing = ref(false)
+  const editData = ref({
+    displayName: null,
+  })
+  const processingEdit = ref(false)
+
+
+  const handleShowFormEdit = () => {
+    editing.value = true
+    editData.value.displayName = user.value.displayName
+  }
+  const handleCancelEdit = () => {
+    editing.value = false
+  }
+
+  const handleEdit = async () => {
+    processingEdit.value = true
+    await editUser(editData.value)
+    processingEdit.value = false
+    handleCancelEdit()
+  }
+
+  return {
+    editing,
+    editData,
+    processingEdit,
+    handleShowFormEdit,
+    handleCancelEdit,
+    handleEdit,
+  }
+}
 </script>
 <template>
   <PrincipalTitle>Mi perfil</PrincipalTitle>
