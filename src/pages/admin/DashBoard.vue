@@ -1,75 +1,15 @@
 <script setup>
-import { subscribeToAuth } from "../../services/auth.js";
-import { getAllGames } from "../../services/games.js";
-import { getAllUsers } from "../../services/user.js";
-
 import PrincipalTitle from "../../components/PrincipalTitle.vue";
 import BaseLoader from "../../components/BaseLoader.vue";
-import { onMounted, onUnmounted, ref } from "vue";
 
-const {user} = useUser() // esta linea es importante
+import { useAuth } from "../../composition/useAuth.js";
+import { useGames } from "../../composition/useGames.js";
+import { useChats } from "../../composition/useChats.js";
+
+const {user} = useAuth() // esta linea es importante
 const {loadingChats, chats} = useChats()
 const {loadingGames, games} = useGames()
-
-
-function useUser () {
-  const user = ref({
-  id: null,
-  email: null,
-  rol: null,
-})
-let  authUnsubscribe;
-
-onMounted(async()=>{
-  authUnsubscribe = subscribeToAuth((newUser) => {
-      user.value = newUser;
-    });
-})
-onUnmounted(() => authUnsubscribe())
-return {
-  user,
-}
-}
-
-function useChats () {
-  const loadingChats = ref(false)
-  const chats = ref([])
-
-  onMounted(async()=>{
-    loadingChats.value = true;
-    getAllUsers().then((allChats) => {
-      chats.value = allChats;
-      loadingChats.value = false;
-    });
-  })
-
-  return {
-    loadingChats,
-    chats,
-  }
-}
-
-function useGames () {
-const loadingGames = ref(true)
-const games = ref([])
-
-onMounted(async () => {
-    loadingGames.value = true;
-    getAllGames().then((allGames) => {
-      games.value = allGames;
-      loadingGames.value = false;
-    });
-    
-})
-
-return {
-  loadingGames,
-  games
-}
-}
-
 </script>
-
 <template>
   <div class="mx-auto mt-8">
     <PrincipalTitle>Dashboard</PrincipalTitle>
@@ -130,7 +70,7 @@ return {
             <div>
               <b>Usuario: </b>
               <router-link
-                :to="`/usuario/${chat.id}/chat`"
+                :to="`/usuario/${chat.id}`"
                 class="text-blue-600"
                 >{{ chat.email }}</router-link
               >

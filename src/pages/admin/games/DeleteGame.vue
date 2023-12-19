@@ -3,13 +3,14 @@ import { onMounted, onUnmounted, ref } from 'vue';
 import BaseButton from '../../../components/BaseButton.vue';
 import BaseLoader from '../../../components/BaseLoader.vue';
 import PrincipalTitle from '../../../components/PrincipalTitle.vue';
-import { subscribeToAuth } from '../../../services/auth.js';
 import { getGameById, deleteGameById } from '../../../services/games.js';
 import { useRoute,useRouter } from 'vue-router';
 
+import { useAuth } from '../../../composition/useAuth';
+
+const {user} = useAuth()
 const {
     loadingGame,
-    user,
     game,
     deleteGame,
 } = useDeleteGame()
@@ -18,18 +19,13 @@ function useDeleteGame () {
     const route = useRoute() // obtener los parametros
 const router = useRouter() // redireccionar
 const loadingGame = ref(true)
-const user = ref({
-    id:null,
-    email:null,
-    rol:null
-})
+
 const game = ref({
     id: null,
     title: null,
     description: null,
     price: null
 })
-let authUnsubscribe
 
 const deleteGame = () => {
     deleteGameById(route.params.id)
@@ -38,18 +34,13 @@ const deleteGame = () => {
                 )
 }
 onMounted(async ()=>{
-    authUnsubscribe = subscribeToAuth(newUser => {
-            user.value = newUser
-            })
             loadingGame.value = true
             game.value = await getGameById(route.params.id)
             loadingGame.value = false
 })
-onUnmounted(()=>authUnsubscribe())
 
 return {
     loadingGame,
-    user,
     game,
     deleteGame,
 }

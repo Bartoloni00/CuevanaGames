@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
-import { subscribeToAuth, logout } from "./services/auth.js";
 import { useRouter } from "vue-router";
+
+import {logout } from "./services/auth.js";
+import { useAuth } from "./composition/useAuth";
 
 const {handleLogout} = useLogOut()
 const {user} = useAuth()
@@ -16,30 +17,6 @@ function useLogOut(){
   return {
     handleLogout,
   }
-}
-
-function useAuth(){
-  const user = ref({
-  id: null,
-  email: null,
-  rol: null,
-})
-
-let authUnsubscribe
-
-onMounted(() => {
-    authUnsubscribe = subscribeToAuth((newUserData) => {
-      user.value = {
-        ...newUserData,
-      }
-    })
-  })
-
-onUnmounted(() => authUnsubscribe())
-
-return {
-  user,
-}
 }
 
 

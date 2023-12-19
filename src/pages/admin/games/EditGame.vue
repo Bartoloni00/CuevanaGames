@@ -3,15 +3,15 @@ import BaseButton from '../../../components/BaseButton.vue';
 import BaseLabel from '../../../components/BaseLabel.vue'
 import BaseInput from '../../../components/BaseInput.vue'
 import PrincipalTitle from '../../../components/PrincipalTitle.vue';
-import { subscribeToAuth } from '../../../services/auth.js'
 import { getGameById, updateGameById } from '../../../services/games.js'
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useRouter,useRoute } from 'vue-router';
 
+import { useAuth } from '../../../composition/useAuth';
+const {user} = useAuth()
 const {
     gameName,
         processingFormEdit,
-        user,
         game,
         loadingGame,
         handleEditGame,
@@ -29,12 +29,6 @@ function useEditGame () {
                     id: null,
                     price: null,
                 })
-    const user = ref({
-                    id: null,
-                    email: null,
-                    rol: null,
-                })
-    let authUnsubscribe
     const gameName = ref('') 
 
     const handleEditGame = async () => {
@@ -59,20 +53,15 @@ function useEditGame () {
     }
 
     onMounted(async () => {
-        authUnsubscribe = subscribeToAuth(newUser => {
-                user.value = newUser;
-            })
             loadingGame.value = true
             game.value = await getGameById(route.params.id)
             gameName.value = game.value.title
             loadingGame.value = false
     })
-    onUnmounted(()=>authUnsubscribe())
 
     return {
         gameName,
         processingFormEdit,
-        user,
         game,
         loadingGame,
         handleEditGame,
@@ -108,6 +97,6 @@ function useEditGame () {
                 v-model="game.price"
             />
         </div>
-        <BaseButton :loading="processingFormEdit">Editar juego: {{ gameName }}</BaseButton>
+        <BaseButton :loading="processingFormEdit" color="yellow">Editar juego: {{ gameName }}</BaseButton>
     </form>
 </template>

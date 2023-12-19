@@ -1,17 +1,18 @@
 <script setup>
-import BaseButton from '../../../components/BaseButton.vue';
+import BaseButton from '../../../components/BaseButton.vue'
 import BaseLabel from '../../../components/BaseLabel.vue'
 import BaseInput from '../../../components/BaseInput.vue'
-import PrincipalTitle from '../../../components/PrincipalTitle.vue';
-import { createGame } from '../../../services/games.js';
-import { subscribeToAuth } from '../../../services/auth.js'
-import { onMounted, onUnmounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import PrincipalTitle from '../../../components/PrincipalTitle.vue'
+import { createGame } from '../../../services/games.js'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+import { useAuth } from '../../../composition/useAuth'
+
+const {user} = useAuth()
 const {
     handleCreateGame,
     processingForm,
-    user,
     newGame,
 } = useCreateGame()
 
@@ -24,12 +25,6 @@ const newGame = ref({
                 description: '',
                 price: null,
             })
-const user = ref({
-                id: null,
-                email: null,
-                rol: null,
-            })
-let authUnsubscribe
 
 const handleCreateGame = () => {
     if (processingForm.value) return;
@@ -57,18 +52,10 @@ const handleCreateGame = () => {
             processingForm.value = false; // Asegúrate de restablecer el estado en caso de error
         });
 }
-onMounted(()=>{
-    authUnsubscribe = subscribeToAuth(newUser => {
-            user.value = newUser;
-            });
-})
-
-onUnmounted(()=>authUnsubscribe())
 
 return {
     handleCreateGame,
     processingForm,
-    user,
     newGame,
 }
 }
@@ -101,6 +88,6 @@ return {
                 v-model="newGame.price"
             />
         </div>
-        <BaseButton :loading="processingForm">Agregar juego</BaseButton>
+        <BaseButton :loading="processingForm" color="green">Agregar juego</BaseButton>
     </form>
 </template>

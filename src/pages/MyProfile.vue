@@ -1,13 +1,17 @@
 <script setup>
-import { editUser, subscribeToAuth } from "../services/auth.js";
+import { ref } from "vue";
+
 import BaseLoader from "../components/BaseLoader.vue";
 import BaseButton from "../components/BaseButton.vue";
 import BaseLabel from "../components/BaseLabel.vue";
 import PrincipalTitle from "../components/PrincipalTitle.vue";
 import BaseInput from "../components/BaseInput.vue";
-import { onMounted, onUnmounted, ref } from "vue";
 
-const {user, loadingUser} = useUserAuth()
+import { editUser} from "../services/auth.js";
+
+import { useAuth } from "../composition/useAuth";
+
+const {user, loadingUser} = useAuth()
 const {
     editing,
     editData,
@@ -17,29 +21,7 @@ const {
     handleEdit,
   } = useEditingUser()
 
-function useUserAuth () {
-  const user = ref({
-  id: null,
-  email: null,
-  rol: null,
-  displayName: null
-})
-const loadingUser = ref(true)
-let authUnsubscribe =  () => {}
 
-onMounted(() => {
-    loadingUser.value = true;
-    authUnsubscribe.value = subscribeToAuth((userAuth) => (user.value = userAuth));
-    loadingUser.value = false;
-  })
-
-onUnmounted(() => authUnsubscribe())
-
-return {
-  user,
-  loadingUser
-}
-}
 
 function useEditingUser () {
   const editing = ref(false)

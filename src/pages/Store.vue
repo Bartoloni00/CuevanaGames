@@ -1,33 +1,10 @@
 <script setup>
 import PrincipalTitle from "../components/PrincipalTitle.vue";
 import BaseLoader from "../components/BaseLoader.vue";
-import { getAllGames } from "../services/games.js";
-import { onMounted, ref } from "vue";
+import LinkButton from "../components/LinkButton.vue";
+import { useGames } from "../composition/useGames";
 
 const {loadingGames, games} = useGames()
-
-function useGames () {
-  const loadingGames = ref(true)
-  const games = ref([])
-
-  onMounted(async () => {
-    loadingGames.value = true;
-      getAllGames()
-        .then((allGames) => {
-          games.value = allGames;
-          loadingGames.value = false;
-        })
-        .catch((error) => {
-          console.error(error);
-          loadingGames.value = false;
-        })
-  })
-
-  return {
-    loadingGames,
-    games,
-  }
-}
 </script>
 <template>
   <div>
@@ -49,12 +26,11 @@ function useGames () {
           <div class="text-lg font-bold text-blue-500 my-2">
             Precio: ${{ game.price }}
           </div>
-          <router-link
-            :to="`/tienda/${game.id}`"
-            class="bg-blue-400 rounded-lg m-2 mx-auto py-1.5 px-2.5"
+          <LinkButton
+          :url="`/tienda/${game.id}`"
           >
-            Ver detalles
-          </router-link>
+          Ver detalles
+          </LinkButton>
         </div>
       </div>
     </template>

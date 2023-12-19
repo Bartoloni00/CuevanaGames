@@ -41,7 +41,7 @@ import { useRouter } from 'vue-router';
 
 // capturamos el router usando la funcion de composicion:
 // useRouter de Vue Router.
-    const router = useRouter()
+const router = useRouter()
 
 const processingLogin = ref(false)
 const form = ref({

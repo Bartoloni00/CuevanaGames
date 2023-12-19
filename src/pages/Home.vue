@@ -1,41 +1,25 @@
 <script setup>
-import BaseButton from "../components/BaseButton.vue";
+import LinkButton from "../components/LinkButton.vue";
 </script>
 <template>
   <div class="container mx-auto px-4">
     <!-- Primera Sección -->
-    <section className="border max-w-[1536px] mx-auto">
-      <div className="flex flex-col items-center md:flex-row w-full">
-        <div className="px-6 text-left w-full">
-          <h1 className="font-Cardo text-3xl uppercase text-left mb-3">
-            Cuevana Games
-          </h1>
-          <p className="font-Roboto text-base text-left">
-            Descubre la opción de juego perfecta en nuestra amplia variedad.
-          </p>
-          <p className="font-Roboto text-base text-left">
-            Encuentra aquí y haz que tus sueños de juego se hagan realidad.
-          </p>
-          <button
-            className="p-2.5 text-sm text-center text-white rounded-[10px] bg-[#2563eb] mt-3 px-4"
-          >
-            DESCUBRIR
-          </button>
-        </div>
-        <div
-          className="md:w-full flex flex-col items-center justify-center aspect-w-16 aspect-h-9 sm:aspect-w-4 sm:aspect-h-3"
-        >
-          <img
-            src="../../public/cuevana-games.png"
-            alt="Hombre levantando pesas"
-            width="{800}"
-            height="{450}"
-            loading="lazy"
-            className="w-full h-full object-contain"
-          />
-        </div>
-      </div>
-    </section>
+    <section className=" h-[85vh] flex items-center ">
+  <div className="mx-auto w-full text-center">
+    <div className="px-6">
+      <h1 className="text-8l uppercase mb-3">
+        Cuevana Games
+      </h1>
+      <p className="text-xl my-[5%]">
+        Tu próximo juego favorito al precio más barato del mercado
+      </p>
+      <LinkButton url="/tienda">
+        Descubrir
+      </LinkButton>
+    </div>
+  </div>
+</section>
+
     <section className="mt-4 mx-2">
       <h2 class="mb-2 text-2xl font-bold text-center text-black">
         Contamos con
@@ -43,7 +27,7 @@ import BaseButton from "../components/BaseButton.vue";
       <div
         className="gap-[40px] mx-auto flex flex-col items-center md:flex-row px-4 md:px-2"
       >
-        <div className="border rounded-lg shadow-md md:min-h-[550px] w-full">
+        <div className=" rounded-lg shadow-md md:min-h-[550px] w-full">
           <div
             className="min-h-[150px] flex flex-col justify-center items-center"
           >
@@ -55,12 +39,12 @@ import BaseButton from "../components/BaseButton.vue";
             />
           </div>
           <div className="text-center">
-            <h3 className="font-Cardo uppercase text-xl py-4">
+            <h3 className="uppercase text-xl py-4">
               AMPLIA VARIEDAD DE JUEGOS
             </h3>
           </div>
           <div className="p-2">
-            <p className="font-Roboto text-base text-center">
+            <p className="text-base text-center">
               Explora nuestra amplia variedad de juegos y encuentra algo para
               todos los gustos. Desde emocionantes aventuras de acción hasta
               desafiantes rompecabezas, nuestra selección cuenta con títulos
@@ -70,7 +54,7 @@ import BaseButton from "../components/BaseButton.vue";
             </p>
           </div>
         </div>
-        <div className="border rounded-lg shadow-md md:min-h-[550px] w-full">
+        <div className=" rounded-lg shadow-md md:min-h-[550px] w-full">
           <div
             className="min-h-[150px] flex flex-col justify-center items-center"
           >
@@ -82,12 +66,12 @@ import BaseButton from "../components/BaseButton.vue";
             />
           </div>
           <div className="text-center">
-            <h3 className="font-Cardo uppercase text-xl py-4">
+            <h3 className="uppercase text-xl py-4">
               LOS ULTIMOS ESTRENOS
             </h3>
           </div>
           <div className="p-2">
-            <p className="font-Roboto text-base text-center">
+            <p className="text-base text-center">
               Descubre lo más reciente en entretenimiento con nuestra selección
               de los últimos estrenos. Sumérgete en mundos nuevos, gráficos
               impresionantes y experiencias de juego innovadoras. Mantente al
@@ -96,19 +80,19 @@ import BaseButton from "../components/BaseButton.vue";
             </p>
           </div>
         </div>
-        <div className="border rounded-lg shadow-md md:min-h-[550px] w-full">
+        <div className=" rounded-lg shadow-md md:min-h-[550px] w-full">
           <div
             className="min-h-[150px] flex flex-col justify-center items-center"
           >
             <img src="../../public/seta.png" alt="" width="100" height="100" />
           </div>
           <div className="text-center">
-            <h3 className="font-Cardo uppercase text-xl py-4">
+            <h3 className="uppercase text-xl py-4">
               LOS JUEGOS CLASICOS
             </h3>
           </div>
           <div className="p-2">
-            <p className="font-Roboto text-base text-center">
+            <p className="text-base text-center">
               Sumérgete en la nostalgia con nuestra colección de juegos
               clásicos. Revive la emoción de los títulos atemporales que
               marcaron época, disponibles para jugar en línea. Desde los
@@ -211,7 +195,7 @@ import BaseButton from "../components/BaseButton.vue";
       </h2>
       <div class="flex flex-wrap justify-between align-middle gap-4">
         <div
-          class="w-72 bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700"
+          class="w-72 bg-white  -gray-200 rounded-lg shadow dark:-gray-700"
         >
           <a href="https://github.com/Bartoloni00" target="_blank">
             <img
@@ -224,12 +208,11 @@ import BaseButton from "../components/BaseButton.vue";
             <p class="mb-2 text-lg font-bold tracking-tight text-black">
               Jonathan Abraham Bartoloni
             </p>
-            <a
-              href="https://github.com/Bartoloni00"
-              target="_blank"
-              class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            <LinkButton 
+              url="https://github.com/Bartoloni00"
+              internalLink="external"
             >
-              Visitar perfil de GitHub
+            Visitar perfil de GitHub
               <svg
                 class="w-3.5 h-3.5 ml-2"
                 aria-hidden="true"
@@ -245,12 +228,12 @@ import BaseButton from "../components/BaseButton.vue";
                   d="M1 5h12m0 0L9 1m4 4L9 9"
                 />
               </svg>
-            </a>
+            </LinkButton>
           </div>
         </div>
 
         <div
-          class="w-72 bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700"
+          class="w-72 bg-white  -gray-200 rounded-lg shadow dark:-gray-700"
         >
           <a href="https://github.com/Ezearevalodev" target="_blank">
             <img
@@ -263,12 +246,11 @@ import BaseButton from "../components/BaseButton.vue";
             <p class="mb-2 text-lg font-bold tracking-tight text-black">
               Ezequiel Thomas Arevalo
             </p>
-            <a
-              href="https://github.com/Ezearevalodev"
-              target="_blank"
-              class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            <LinkButton 
+              url="https://github.com/Ezearevalodev"
+              internalLink="external"
             >
-              Visitar perfil de GitHub
+            Visitar perfil de GitHub
               <svg
                 class="w-3.5 h-3.5 ml-2"
                 aria-hidden="true"
@@ -284,7 +266,8 @@ import BaseButton from "../components/BaseButton.vue";
                   d="M1 5h12m0 0L9 1m4 4L9 9"
                 />
               </svg>
-            </a>
+            </LinkButton>
+              
           </div>
         </div>
       </div>

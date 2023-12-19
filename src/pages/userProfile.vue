@@ -1,37 +1,11 @@
 <script setup>
-import { onMounted, ref } from 'vue';
 import BaseLoader from '../components/BaseLoader.vue';
+import LinkButton from '../components/LinkButton.vue';
 import PrincipalTitle from '../components/PrincipalTitle.vue';
-import { getUserById } from '../services/user';
-import { useRoute } from 'vue-router';
 
-const {loadingProfile, userProfile} = useUserProfile()
+import {useUser} from '../composition/useUser.js'
 
-function useUserProfile () {
-    const route = useRoute()
-
-    const loadingProfile = ref(true)
-    const userProfile = ref({
-        id: null,
-        email: null
-    })
-
-    // utilizar el ciclo de vida mounted con api composition
-    onMounted(async () => {
-        loadingProfile.value = true;
-        const userData = await getUserById(route.params.id);
-        userProfile.value = {
-            id: userData.id,
-            email: userData.email
-        }
-        loadingProfile.value = false;
-    })
-
-    return {
-        loadingProfile,
-        userProfile,
-    }
-}
+const {loadingProfile, userProfile} = useUser()
 
 </script>
 <template>
@@ -41,6 +15,12 @@ function useUserProfile () {
     <template v-else>
         <PrincipalTitle>Perfil Del usuario: {{ userProfile.email }}</PrincipalTitle>
 
-        <router-link :to="`/usuario/${userProfile.id}/chat`" class="bg-yellow-700 px-2 py-1 m-2 rounded-md">Iniciar chat</router-link>
+        <!-- <router-link :to="`/usuario/${userProfile.id}/chat`" class="bg-yellow-700 px-2 py-1 m-2 rounded-md">Iniciar chat</router-link> -->
+        <LinkButton
+        :url="`/usuario/${userProfile.id}/chat`"
+        color="yellow"
+        >
+        Iniciar chat
+        </LinkButton>
     </template>
 </template>
