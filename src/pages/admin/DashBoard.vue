@@ -1,6 +1,6 @@
 <script setup>
 import PrincipalTitle from "../../components/PrincipalTitle.vue";
-import BaseLoader from "../../components/BaseLoader.vue";
+import loadingContext from "../../components/loadingContext.vue";
 
 import { useAuth } from "../../composition/useAuth.js";
 import { useGames } from "../../composition/useGames.js";
@@ -26,7 +26,7 @@ const {loadingGames, games} = useGames()
       <div class="w-1/2 pr-4">
         <h2 class="text-xl font-semibold mb-2">Games</h2>
 
-        <template v-if="!loadingGames">
+        <loadingContext :loading="loadingGames">
           <table class="min-w-full table-auto mb-4">
             <thead>
               <tr>
@@ -54,18 +54,14 @@ const {loadingGames, games} = useGames()
               </tr>
             </tbody>
           </table>
-        </template>
-
-        <template v-else>
-          <BaseLoader />
-        </template>
+        </loadingContext>
       </div>
 
       <!-- Columna de Chats -->
       <div class="w-1/2 pl-4">
         <h2 class="text-xl font-semibold mb-2">Chats</h2>
 
-        <template v-if="!loadingChats">
+        <loadingContext :loading="loadingChats">
           <div v-for="chat in chats" :key="chat.id" class="mb-4">
             <div>
               <b>Usuario: </b>
@@ -76,11 +72,7 @@ const {loadingGames, games} = useGames()
               >
             </div>
           </div>
-        </template>
-
-        <template v-else>
-          <BaseLoader />
-        </template>
+        </loadingContext >
       </div>
     </div>
   </div>

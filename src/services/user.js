@@ -4,13 +4,16 @@ import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/fi
 /**
  *
  * @param {string} id
- * @returns {{id: string, email: string}}
+ * @returns {{id: string, email: string, displayName: string, level: Number}}
  */
 export async function getUserById(id) {
-  const snapshot = getDoc(doc(db, `/users/${id}`));
+  const snapshot = await getDoc(doc(db, `/users/${id}`));
   return {
     id,
-    email: (await snapshot).data().email,
+    email: snapshot.data().email,
+    displayName: snapshot.data().displayName,
+    rol: snapshot.data().rol,
+    level: snapshot.data().level,
   };
 }
 
@@ -42,7 +45,7 @@ export async function createUserProfile(id, data) {
 /**
  * 
  * @param {string} id
- * @param {{displayName: string|null}} data 
+ * @param {{displayName: string|null, level: Number|null}} data 
  * @return {Promise}
  */
 export async function editUserProfile(id, data){

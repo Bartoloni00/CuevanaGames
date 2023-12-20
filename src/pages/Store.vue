@@ -1,20 +1,15 @@
 <script setup>
 import PrincipalTitle from "../components/PrincipalTitle.vue";
-import BaseLoader from "../components/BaseLoader.vue";
 import LinkButton from "../components/LinkButton.vue";
 import { useGames } from "../composition/useGames";
+import Loadingcontext from "../components/loadingcontext.vue";
 
 const {loadingGames, games} = useGames()
 </script>
 <template>
   <div>
     <PrincipalTitle>Compra los mejores juegos en CuevanaGames</PrincipalTitle>
-    <template v-if="loadingGames">
-      <div class="flex justify-center items-center w-full">
-        <BaseLoader />
-      </div>
-    </template>
-    <template v-else>
+    <Loadingcontext :loading="loadingGames">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div
           v-for="game in games"
@@ -33,6 +28,6 @@ const {loadingGames, games} = useGames()
           </LinkButton>
         </div>
       </div>
-    </template>
+    </Loadingcontext>
   </div>
 </template>

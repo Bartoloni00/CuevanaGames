@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import BaseLoader from '../components/BaseLoader.vue';
+import loadingcontext from '../components/loadingcontext.vue';
 import PrincipalTitle from '../components/PrincipalTitle.vue';
 import {getGameById} from '../services/games.js'
 import { useRoute } from 'vue-router';
@@ -32,7 +32,7 @@ function useGame () {
 </script>
 <template>
 	<PrincipalTitle>Detalles del juego: {{ !loadingGame? game.title: 'Cargando...'}}</PrincipalTitle>
-	<template v-if="!loadingGame">
+	<loadingcontext :loading="loadingGame">
 		<div class="bg-white p-8 rounded shadow-md">
 			<h2 class="text-3xl font-semibold mb-4">{{ game.title }}</h2>
 			<p class="text-gray-600 mb-6">{{ game.description }}</p>
@@ -42,8 +42,5 @@ function useGame () {
 				<button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Agregar al carrito</button>
 			</div>
 		</div>
-	</template>
-	<template v-else>
-		<BaseLoader/>
-	</template>
+	</loadingcontext>
 </template>

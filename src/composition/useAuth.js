@@ -6,7 +6,9 @@ export function useAuth () {
     id: null,
     email: null,
     rol: null,
-    displayName: null
+    displayName: null,
+    level: null,
+    fullProfileLoaded: false,
   })
   const loadingUser = ref(true)
   let authUnsubscribe =  () => {}

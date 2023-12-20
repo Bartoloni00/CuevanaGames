@@ -13,7 +13,7 @@ const props = defineProps({
     },
     color:{
         type: String,
-        default: 'blue'
+        default: 'black'
     }
 })
 
@@ -29,7 +29,7 @@ const bgColors = computed(()=>{
           return "bg-red-600 hover:bg-red-500 focus:bg-red-500 active:bg-red-700";
           break;
         default:
-          return "bg-blue-600 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700";
+          return "bg-gray-600 hover:bg-gray-500 focus:bg-gray-700 active:bg-gray-900";
           break;
       }
 })
@@ -38,10 +38,10 @@ const bgColors = computed(()=>{
     <template v-if="internalLink == 'internal'">
         <router-link :to="props.url" :class="{
         'inline-flex': true,
+        'rounded-lg':true,
         'items-center': true,
-        'px-3': true,
+        'px-4': true,
         'py-2': true,
-        'text-sm': true,
         'font-medium': true,
         'text-center': true,
         'text-white': true,
@@ -53,10 +53,10 @@ const bgColors = computed(()=>{
     <template v-else-if="internalLink == 'external'">
         <a :href="props.url" :class="{
         'inline-flex': true,
+        'rounded-lg':true,
         'items-center': true,
-        'px-3': true,
+        'px-4': true,
         'py-2': true,
-        'text-sm': true,
         'font-medium': true,
         'text-center': true,
         'text-white': true,

@@ -1,81 +1,77 @@
-<script>
+<script setup>
 import BaseButton from "../components/BaseButton.vue";
 import BaseLabel from "../components/BaseLabel.vue";
-import BaseLoader from "../components/BaseLoader.vue";
-import { getUserById } from "../services/user.js";
-import { subscribeToAuth } from "../services/auth.js";
+import PrincipalTitle from "../components/PrincipalTitle.vue";
+
 import { formatDate } from "../helpers/date.js";
 import {
   sendPrivateMessage,
   subscribeToPrivateChat,
 } from "../services/private-chat.js";
-import PrincipalTitle from "../components/PrincipalTitle.vue";
 
-export default {
-  name: "PrivateChat",
-  components: { BaseLoader, BaseLabel, BaseButton, PrincipalTitle },
-  data() {
-    return {
-      loadingMessages: true,
-      messages: [],
-      loadingProfile: true,
-      userProfile: {
-        id: null,
-        email: null,
-      },
-      userAuth: {
-        id: null,
-        email: null,
-        rol: null,
-      },
-      newMessage: {
-        message: "",
-      },
-      authUnsubscribe: () => {},
-      messageUnsubscribe: () => {},
-    };
-  },
-  methods: {
-    handleMessage() {
-      sendPrivateMessage({
-        sender: this.userAuth.id,
-        receiver: this.userProfile.id,
-        message: this.newMessage.message,
-      });
-      this.newMessage.message = "";
-    },
-    dateToString(date) {
-      return formatDate(date);
-    },
-  },
-  async mounted() {
-    this.loadingProfile = true;
-    this.userProfile = await getUserById(this.$route.params.id);
-    this.authUnsubscribe = subscribeToAuth((user) => (this.userAuth = user));
-    this.loadingProfile = false;
-    this.loadingMessages = true;
-    this.messageUnsubscribe = await subscribeToPrivateChat(
-      { user1: this.userProfile.id, user2: this.userAuth.id },
-      (newMessages) => (this.messages = newMessages)
+import { useAuth } from "../composition/useAuth";
+import { useUser } from "../composition/useUser";
+import { useRoute } from "vue-router";
+import { watch, onUnmounted, ref } from "vue";
+import Loadingcontext from "../components/loadingcontext.vue";
+
+const route = useRoute()
+// con esta sintaxis user pasa a ser userAuth en este archivo
+const {user: userAuth} = useAuth()
+const {userProfile,loadingProfile} = useUser(route.params.id)
+const {loadingMessages, messages} = usePrivateChatMessages(userAuth, userProfile)
+const {newMessage, handleMessage} = usePrivateChatForm(userAuth, userProfile)
+
+function usePrivateChatMessages(senderUser, receiverUser){
+  const loadingMessages = ref(true)
+  const messages = ref([])
+
+  let chatUnSubscribe = ()=>{}
+// observamos el valor del receiverUser hasta que tengamos su data
+  watch(receiverUser, async newReceiverUser => {
+    if(newReceiverUser.id !== null) {
+      loadingMessages.value = true;
+    chatUnSubscribe = subscribeToPrivateChat(
+      { user1: newReceiverUser.id, user2: senderUser.value.id},
+      (newMessages) => (messages.value = newMessages)
     );
-    this.loadingMessages = false;
-  },
-  unmounted() {
-    this.authUnsubscribe();
-  },
-};
+    loadingMessages.value = false;
+    }
+  })
+
+  onUnmounted(()=>chatUnSubscribe())
+  return {
+    loadingMessages,
+    messages,
+  }
+}
+
+function usePrivateChatForm(senderUser, receiverUser){
+  const newMessage = ref({
+    message: ""
+  })
+
+  const handleMessage = () => {
+    sendPrivateMessage({
+        sender: senderUser.value.id,
+        receiver: receiverUser.value.id,
+        message: newMessage.value.message,
+      });
+      newMessage.value.message = "";
+  }
+
+  return {
+    newMessage,
+    handleMessage,
+  }
+}
 </script>
 <template>
-  <template v-if="!loadingProfile">
+  <Loadingcontext :loading="loadingProfile">
     <PrincipalTitle>Chat privado con: {{ userProfile.email }}</PrincipalTitle>
     <section>
       <h2>Mensajes</h2>
-      <template v-if="this.loadingMessages">
-        <div class="flex justify-center items-center w-screen h-screen">
-          <BaseLoader />
-        </div>
-      </template>
-      <template v-else>
+      <Loadingcontext :loading="loadingMessages">
         <div
           class="flex flex-col bg-slate-100 p-2.5 overflow-y-scroll max-h-[600px]"
         >
@@ -91,11 +87,11 @@ export default {
           >
             <p class="p-2">{{ message.message }}</p>
             <div class="text-right p-2">
-              {{ dateToString(message.created_at) || "enviando..." }}
+              {{ formatDate(message.created_at) || "enviando..." }}
             </div>
           </div>
         </div>
-      </template>
+      </Loadingcontext>
     </section>
     <section>
       <h2 class="sr-only">Enviar un mensaje</h2>
@@ -114,8 +110,5 @@ export default {
         <!-- Agrega el tipo "submit" al botón -->
       </form>
     </section>
-  </template>
-  <template v-else>
-    <BaseLoader />
-  </template>
+  </Loadingcontext>
 </template>

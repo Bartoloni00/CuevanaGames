@@ -8,10 +8,12 @@ let userData = {
     email: null,
     rol: null,
     displayName: null,
+    level: null,
+    fullProfileLoaded: false,
 }
 let observers = []
 
-async function fetchUserProfile(userId) {
+export async function fetchUserProfile(userId) {
     try {
         const docRef = doc(db, 'users', userId);
         const docSnap = await getDoc(docRef);
@@ -35,26 +37,28 @@ if (localStorage.getItem('userData')) {
 
 onAuthStateChanged(auth, async user => {
     if (user) {
+        updateUserData({
+            id: user.uid,
+            email: user.email,
+            displayName: user.displayName,
+        })
+
+
         const profile = await fetchUserProfile(user.uid);
-  
-        if(profile) {
-            userData = {
-                id: user.uid,
-                email: user.email,
-                rol: profile.rol, // ahora accedemos al rol desde la data del perfil
-                displayName: profile.displayName
-            };
-            localStorage.setItem('userData', JSON.stringify(userData));
-            notifyAll();
-        }
+
+        updateUserData({
+            ...userData,
+            rol: profile.rol,
+            level: profile.level,
+            fullProfileLoaded: true
+        })
     } else {
-        userData = {
+        updateUserData({
             id: null,
             email: null,
             rol: null,
             displayName: null,
-        };
-        localStorage.removeItem('userData');
+        })
     }
 })
 
@@ -63,22 +67,23 @@ onAuthStateChanged(auth, async user => {
  * @param {{displayName || string|null}} data 
  * @return {Promise}
  */
-export async function editUser({displayName}){
+export async function editUser({displayName, level}){
     try {
         // Actualizamos los datos en Auth
         const promiseAuth = updateProfile(auth.currentUser, {
             displayName
         })
         // Actualizamos los datos en DB
-        const promiseProfile = editUserProfile(userData.id,{displayName})
+        const promiseProfile = editUserProfile(userData.id,{
+            displayName,
+            level,// solo lo pasamos aca por auth no lo acepta
+        })
 
-        userData = {
+        updateUserData({
             ...userData,
-            displayName
-        }
-
-        localStorage.setItem('user', JSON.stringify(userData))
-        notifyAll()
+            displayName,
+            level,
+        })
         // Promise.all : esto sirve para utilizar varias promesas en paralelo que no se ven afectadas entre si
         return Promise.all([promiseAuth, promiseProfile]) 
     } catch (error) {
@@ -126,16 +131,7 @@ export function login({email,password}) {
 
 export function logout() {
     return signOut(auth).then(() => {
-        // Aquí limpia cualquier información del usuario que tengas en el estado.
-        userData = {
-            id: null,
-            email: null,
-            rol: null,
-        };
-        // Remueve el perfil del usuario del localStorage también.
-        localStorage.removeItem('userData');
-        // Notifica a todos los observadores que el usuario ha cerrado sesión.
-        notifyAll();
+        clearUserData()
         console.log("Usuario ha cerrado sesión exitosamente.");
     }).catch(error => {
         // Aquí manejas el caso de un error al intentar cerrar la sesión.
@@ -165,4 +161,36 @@ function notify(callback) {
 
 function notifyAll() {
     observers.forEach(observer => notify(observer))
+}
+
+/**
+ * Actualiza los datos del usuario agregando los que se proveen por parametro.
+ * Una vez actualizados se guardan en localstorage y se notifica de esto a los observers
+ * @param {id: string|null, email: string|null, displayName: string|null, rol:string|null, level: number|null, fullProfileLoaded: boolean} newData 
+ */
+function updateUserData(newData) {
+    userData = {
+        ...userData,
+        ...newData,
+    }
+    localStorage.setItem('user',JSON.stringify(userData))
+    notifyAll()
+}
+
+/**
+ * Aquí limpia cualquier información del usuario que tengas en el estado.
+ * Remueve el perfil del usuario del localStorage también.
+ * Notifica a todos los observadores que el usuario ha cerrado sesión.
+ */
+function clearUserData(){
+    userData = {
+        id: null,
+        email: null,
+        rol: null,
+        displayName: null,
+        level: null,
+        fullProfileLoaded: false,
+    };
+    localStorage.removeItem('userData');
+    notifyAll();
 }
