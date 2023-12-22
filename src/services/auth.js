@@ -2,16 +2,22 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndP
 import { auth,db } from './firebase.js'
 import { createUserProfile, editUserProfile } from "./user.js"
 import { doc, getDoc } from 'firebase/firestore'
+import {getFilesUrl, uploadFile} from './fire-storage.js'
 
 let userData = {
     id: null,
     email: null,
     rol: null,
     displayName: null,
+    photoURL: null,
     level: null,
     fullProfileLoaded: false,
 }
 let observers = []
+
+if (localStorage.getItem('userData')) {
+    updateUserData(JSON.parse(localStorage.getItem('userData')))
+}
 
 export async function fetchUserProfile(userId) {
     try {
@@ -41,6 +47,7 @@ onAuthStateChanged(auth, async user => {
             id: user.uid,
             email: user.email,
             displayName: user.displayName,
+            photoURL: user.photoURL,
         })
 
 
@@ -67,28 +74,42 @@ onAuthStateChanged(auth, async user => {
  * @param {{displayName || string|null}} data 
  * @return {Promise}
  */
-export async function editUser({displayName, level}){
+export async function editUser({displayName, level, photoURL}){
     try {
-        // Actualizamos los datos en Auth
-        const promiseAuth = updateProfile(auth.currentUser, {
-            displayName
-        })
-        // Actualizamos los datos en DB
-        const promiseProfile = editUserProfile(userData.id,{
-            displayName,
-            level,// solo lo pasamos aca por auth no lo acepta
-        })
+        const data = {}
+        if (displayName != null) data.displayName = displayName
+        if (photoURL != null) data.photoURL = photoURL
 
-        updateUserData({
-            ...userData,
-            displayName,
-            level,
-        })
+        // Actualizamos los datos en Auth
+        const promiseAuth = updateProfile(auth.currentUser, data)
+        // Preparamos los datos para firestore
+        if (level != null) data.level = level
+        // Actualizamos los datos en DB
+        const promiseProfile = editUserProfile(userData.id,data)
+
+        updateUserData(data)
         // Promise.all : esto sirve para utilizar varias promesas en paralelo que no se ven afectadas entre si
         return Promise.all([promiseAuth, promiseProfile]) 
     } catch (error) {
         throw error
     }
+}
+
+/**
+ * 
+ * @param {file} file 
+ * @returns {Promise}
+ */
+export async function editUserImage(file) {
+    const filePath = `users/${userData.id}/avatar`
+    await uploadFile(filePath, file)
+
+    // Pedimos la URL que le corresponde
+    const photoURL = await getFilesUrl(filePath)
+
+    return editUser({
+        photoURL,
+    })
 }
 
 export async function register({email,password}) {
@@ -173,7 +194,7 @@ function updateUserData(newData) {
         ...userData,
         ...newData,
     }
-    localStorage.setItem('user',JSON.stringify(userData))
+    localStorage.setItem('userData',JSON.stringify(userData))
     notifyAll()
 }
 
@@ -189,6 +210,7 @@ function clearUserData(){
         rol: null,
         displayName: null,
         level: null,
+        photoURL: null,
         fullProfileLoaded: false,
     };
     localStorage.removeItem('userData');

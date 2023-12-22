@@ -7,6 +7,7 @@ export function useAuth () {
     email: null,
     rol: null,
     displayName: null,
+    photoURL: null,
     level: null,
     fullProfileLoaded: false,
   })

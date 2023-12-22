@@ -4,7 +4,7 @@ import { doc, getDoc, setDoc, getDocs, collection, updateDoc } from "firebase/fi
 /**
  *
  * @param {string} id
- * @returns {{id: string, email: string, displayName: string, level: Number}}
+ * @returns {{id: string|null, email: string|null, displayName: string|null, level: Number, photoURL: string|null}}
  */
 export async function getUserById(id) {
   const snapshot = await getDoc(doc(db, `/users/${id}`));
@@ -14,6 +14,7 @@ export async function getUserById(id) {
     displayName: snapshot.data().displayName,
     rol: snapshot.data().rol,
     level: snapshot.data().level,
+    photoURL: snapshot.data().photoURL,
   };
 }
 
