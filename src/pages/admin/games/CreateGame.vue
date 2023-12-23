@@ -38,14 +38,14 @@ const handleCreateGame = () => {
     };
 
     createGame(gameData)
-        .then(() => {
+        .then(gameId => {
             newGame.value = {
                 title: '',
                 description: '',
                 price: null,
             };
             processingForm.value = false; // Asegúrate de restablecer el estado después de la llamada exitosa
-            router.push({ path: '/panel' });
+            router.push({ path: `/panel/editar-juego/${gameId}` });
         })
         .catch((error) => {
             console.error('Error al agregar el juego:', error);

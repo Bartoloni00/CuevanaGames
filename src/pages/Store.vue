@@ -3,6 +3,7 @@ import PrincipalTitle from "../components/PrincipalTitle.vue";
 import LinkButton from "../components/LinkButton.vue";
 import { useGames } from "../composition/useGames";
 import Loadingcontext from "../components/loadingcontext.vue";
+import PhotoDefault from "../components/PhotoDefault.vue";
 
 const {loadingGames, games} = useGames()
 </script>
@@ -16,6 +17,9 @@ const {loadingGames, games} = useGames()
           :key="game.id"
           class="bg-white p-4 rounded shadow-lg hover:shadow-xl"
         >
+          <PhotoDefault 
+            :element="game"
+          />
           <h2 class="text-xl font-semibold mb-2">{{ game.title }}</h2>
           <p class="text-gray-600 mb-4">{{ game.description }}</p>
           <div class="text-lg font-bold text-blue-500 my-2">

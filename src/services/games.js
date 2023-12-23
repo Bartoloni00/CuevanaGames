@@ -1,4 +1,5 @@
 import { collection, addDoc, getDocs, getDoc, doc, deleteDoc, updateDoc } from 'firebase/firestore';
+import {getFilesUrl, uploadFile} from './fire-storage.js'
 import {db} from './firebase'
 const gamesRef = collection(db, 'games')
 
@@ -29,6 +30,7 @@ export async function getAllGames() {
             title: doc.data().title,
             description: doc.data().description,
             price: doc.data().price,
+            photoURL: doc.data().photoURL,
         }));
         return games;
     } catch (e) {
@@ -47,6 +49,7 @@ export async function getGameById(gameId) {
                 title: gameDoc.data().title,
                 description: gameDoc.data().description,
                 price: gameDoc.data().price,
+                photoURL: gameDoc.data().photoURL,
             };
         } else {
             throw new Error(`No se encontró ningún juego con el ID: ${gameId}`);
@@ -67,17 +70,49 @@ export async function deleteGameById(gameId) {
     }
 }
 
-export async function updateGameById(gameId, { title, description, price }) {
+export async function updateGameById(gameId, { title, description, price, file }) {
     try {
+        // referencio el documento del juego
         const gameRef = doc(gamesRef, gameId);
+
+        if (file != null) {
+            // Cargo la imagen y retorno la url:
+            const photoURL = await editGameImage(gameId, file)
+            console.log('updateGameById', photoURL);
+            // actualizo el documento
+            await updateDoc(gameRef, {
+                title: title,
+                description: description,
+                price: price,
+                photoURL: photoURL,
+            });
+            return
+        }
+
+        // actualizo el documento
         await updateDoc(gameRef, {
             title: title,
             description: description,
-            price: price
+            price: price,
         });
-        console.log(`Juego con ID ${gameId} actualizado correctamente.`);
+        // console.log(`Juego con ID ${gameId} actualizado correctamente.`);
     } catch (e) {
         console.error(`Error updating game with ID ${gameId}:`, e);
         throw new Error(`Error al actualizar el juego con ID ${gameId}`);
     }
+}
+
+/**
+ * 
+ * @param {file} file 
+ * @returns {Promise}
+ */
+async function editGameImage(gameId, file) {
+    const filePath = `games/${gameId}/frontPage`
+    await uploadFile(filePath, file)
+
+    // Pedimos la URL que le corresponde
+    const photoURL = await getFilesUrl(filePath)
+
+    return  photoURL
 }

@@ -15,6 +15,7 @@ const {
         game,
         loadingGame,
         handleEditGame,
+        handleFrontPageChange,
     } = useEditGame()
 
 function useEditGame () {
@@ -28,6 +29,8 @@ function useEditGame () {
                     description: null,
                     id: null,
                     price: null,
+                    file: null,
+                    preview: null,
                 })
     const gameName = ref('') 
 
@@ -40,6 +43,7 @@ function useEditGame () {
             title: game.value.title,
             description: game.value.description,
             price: game.value.price,
+            file: game.value.file,
         };
 
         try {
@@ -51,7 +55,18 @@ function useEditGame () {
             processingFormEdit.value = false;
         }
     }
+    const handleFrontPageChange = event => {
+    game.value.file = event.target.files[0]
 
+    // Previsualizacion:
+    const reader = new FileReader()
+
+    reader.addEventListener('load', () => {
+      game.value.preview = reader.result
+    })
+
+    reader.readAsDataURL(game.value.file)
+  }
     onMounted(async () => {
             loadingGame.value = true
             game.value = await getGameById(route.params.id)
@@ -65,6 +80,7 @@ function useEditGame () {
         game,
         loadingGame,
         handleEditGame,
+        handleFrontPageChange
     }
 }
 </script>
@@ -73,10 +89,30 @@ function useEditGame () {
     <PrincipalTitle>Editando el juego: <b>{{ loadingGame ?'...cargando juego': gameName }}</b></PrincipalTitle>
     <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleEditGame">
         <div>
+            <div>
+            <BaseLabel for="photo">Imagen de perfil </BaseLabel>
+            <input
+                class="w-full py-1.5 px-2 border border-yellow-900 rounded mb-3 disabled:bg-slate-400"
+                type="file"
+                :disabled="processingFormEdit"
+                @change="handleFrontPageChange"
+            />
+            </div>
+            <div v-if="game.preview != null">
+            <p class="text-center">Previsualizacion de la imagen seleccionada: </p>
+            <img 
+            :src="game.preview" 
+            alt="Previsualizacion de la imagen seleccionada" 
+            class="my-2 mx-auto"
+            />
+            </div>
+        </div>
+        <div>
             <BaseLabel for="title">Titulo</BaseLabel>
             <BaseInput 
                 type="text"
                 id="title"
+                :disabled="processingFormEdit"
                 v-model="game.title"
             />
         </div>
@@ -86,6 +122,7 @@ function useEditGame () {
                 class="border border-yellow-900 w-full"
                 id="description"
                 name="description"
+                :disabled="processingFormEdit"
                 v-model="game.description"
             ></textarea>
         </div>
@@ -94,6 +131,7 @@ function useEditGame () {
             <BaseInput
                 type="number"
                 id="price"
+                :disabled="processingFormEdit"
                 v-model="game.price"
             />
         </div>

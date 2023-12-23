@@ -33,7 +33,7 @@ const bgColors = computed(()=> {
 </script>
 
 <template>
-  <button type="submit" :class="`transition w-full p-2 text-white ${bgColors}`">
+  <button type="submit" :class="`transition w-full p-2 text-white ${bgColors} rounded-lg`">
     <BaseLoader v-if="loading"/>
     <slot v-else>Enviar</slot>
   </button>
