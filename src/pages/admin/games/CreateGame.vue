@@ -4,13 +4,17 @@ import BaseLabel from '../../../components/BaseLabel.vue'
 import BaseInput from '../../../components/BaseInput.vue'
 import PrincipalTitle from '../../../components/PrincipalTitle.vue'
 import { createGame } from '../../../services/games.js'
-import { ref } from 'vue'
+import { ref,inject } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAuth } from '../../../composition/useAuth'
 
+// injectamos la notificacion provista por app.
+const {notification, setNotifications} = inject('notification')
+
 const {user} = useAuth()
 const {
+    feedback,
     handleCreateGame,
     processingForm,
     newGame,
@@ -25,7 +29,10 @@ const newGame = ref({
                 description: '',
                 price: null,
             })
-
+const feedback = ref({
+        message: null,
+        type:'success',
+    })
 const handleCreateGame = () => {
     if (processingForm.value) return;
 
@@ -39,17 +46,25 @@ const handleCreateGame = () => {
 
     createGame(gameData)
         .then(gameId => {
+            setNotifications({
+                message: `El juego: ${newGame.value.title} fue agregado exitosamente`,
+                type: 'success',
+            })
             newGame.value = {
                 title: '',
                 description: '',
                 price: null,
             };
-            processingForm.value = false; // Asegúrate de restablecer el estado después de la llamada exitosa
+            processingForm.value = false;
+
             router.push({ path: `/panel/editar-juego/${gameId}` });
         })
         .catch((error) => {
-            console.error('Error al agregar el juego:', error);
-            processingForm.value = false; // Asegúrate de restablecer el estado en caso de error
+            feedback.value = {
+                message: error,
+                type: 'error',
+            }
+            processingForm.value = false;
         });
 }
 
@@ -57,6 +72,7 @@ return {
     handleCreateGame,
     processingForm,
     newGame,
+    feedback,
 }
 }
 </script>
@@ -88,6 +104,9 @@ return {
                 v-model="newGame.price"
             />
         </div>
+        <span v-if="feedback.message" class="text-red-600 text-center py-2">
+            {{ feedback.message }}
+        </span>
         <BaseButton :loading="processingForm" color="green">Agregar juego</BaseButton>
     </form>
 </template>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { inject, ref } from "vue";
 
 import loadingcontext from "../components/loadingcontext.vue";
 import BaseButton from "../components/BaseButton.vue";
@@ -11,6 +11,9 @@ import { editUser, editUserImage} from "../services/auth.js";
 
 import { useAuth } from "../composition/useAuth.js";
 import UserDetails from "../components/UserDetails.vue";
+
+// injectamos la notificacion provista por app.
+const {notification, setNotifications} = inject('notification')
 
 const {user, loadingUser} = useAuth()
 const {
@@ -53,6 +56,18 @@ function useEditingUser () {
   const handleEdit = async () => {
     processingEdit.value = true
     await editUser(editData.value)
+            .then(()=>{
+              setNotifications({
+                message: `El usuario fue editado exitosamente`,
+                type:'success'
+              })
+            })
+            .catch(error=>{
+              setNotifications({
+                message: `Ocurrio un error inesperado al editar el usuario, ${error}`,
+                type:'error'
+              })
+            })
     processingEdit.value = false
     handleCancelEdit()
   }
@@ -81,9 +96,15 @@ function useAvatarEditForm(user){
     processingAvatarEdit.value = true
     try {
       await editUserImage(avatarData.value.file)
+      setNotifications({
+        message: `Se ha cargado el avatar exitosamente`,
+        type:'success'
+      })
     } catch (error) {
-      // TODO
-      console.error('handleAvatarEdit', error);
+      setNotifications({
+        message: `Ocurrio un error inesperado al subir el avatar, ${error}`,
+        type:'error'
+      })
     }
     processingAvatarEdit.value = false
   }
@@ -114,7 +135,7 @@ function useAvatarEditForm(user){
 
 </script>
 <template>
-  <PrincipalTitle>Mi perfil</PrincipalTitle>
+  <PrincipalTitle class="text-center">Mi perfil</PrincipalTitle>
   <loadingcontext :loading="loadingUser">
     <template v-if="!editing && !editingAvatar">
       <UserDetails

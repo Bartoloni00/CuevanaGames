@@ -8,30 +8,30 @@ import PhotoDefault from "../components/PhotoDefault.vue";
 const {loadingGames, games} = useGames()
 </script>
 <template>
-  <div>
-    <PrincipalTitle>Compra los mejores juegos en CuevanaGames</PrincipalTitle>
+    <PrincipalTitle class="text-center">Compra los mejores juegos en CuevanaGames</PrincipalTitle>
     <Loadingcontext :loading="loadingGames">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div
+      <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <article
           v-for="game in games"
           :key="game.id"
-          class="bg-white p-4 rounded shadow-lg hover:shadow-xl"
+          class="bg-slate-100 flex flex-col  rounded shadow-lg hover:shadow-xl hover:bg-slate-200 transition-all duration-300"
         >
-          <PhotoDefault 
-            :element="game"
-          />
-          <h2 class="text-xl font-semibold mb-2">{{ game.title }}</h2>
-          <p class="text-gray-600 mb-4">{{ game.description }}</p>
-          <div class="text-lg font-bold text-blue-500 my-2">
-            Precio: ${{ game.price }}
-          </div>
-          <LinkButton
-          :url="`/tienda/${game.id}`"
-          >
-          Ver detalles
-          </LinkButton>
-        </div>
-      </div>
+              <PhotoDefault 
+              :element="game"
+              class="max-h-[200px] object-cover"
+            />
+            <h2 class="text-xl text-center font-semibold my-2">{{ game.title }}</h2>
+            <p class="text-gray-600 pb-4 text-center">{{ game.description }}</p>
+            <!-- <span class="text-xl text-center font-bold text-green-800 my-2">
+              ${{ game.price }}
+            </span> -->
+            <LinkButton
+            :to="`/tienda/${game.id}`"
+            class="mb-4 mx-auto"
+            >
+              Ver detalles
+            </LinkButton>
+        </article>
+      </section>
     </Loadingcontext>
-  </div>
 </template>

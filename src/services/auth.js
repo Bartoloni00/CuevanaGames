@@ -123,7 +123,7 @@ export async function register({email,password}) {
 
         return {...userData}
     } catch (error) {
-        return {
+        throw {
             code: error.code,
             message: error.message
         }
@@ -146,7 +146,7 @@ export function login({email,password}) {
                 code: error.code,
             }
             console.error("[auth.js login] Error al autenticar: ", output);
-            return output;
+            throw 'Error al iniciar sesion: las credenciales no coinciden';
         });
 }
 

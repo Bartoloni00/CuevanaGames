@@ -1,9 +1,12 @@
 <script setup>
 import LoginForm from '../components/LoginForm.vue';
 import PrincipalTitle from '../components/PrincipalTitle.vue';
-</script>
+const emit = defineEmits(['login',])
+// defino este elemento login
+// el cual recibo de app y luego se los dapo a loginForm
 
+</script>
 <template>
-  <PrincipalTitle>Inicio de sesion</PrincipalTitle>
-  <LoginForm/>
+  <PrincipalTitle class="text-center">Inicio de sesion</PrincipalTitle>
+  <LoginForm />
 </template>

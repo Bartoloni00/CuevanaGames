@@ -4,15 +4,19 @@ import BaseLabel from '../../../components/BaseLabel.vue'
 import BaseInput from '../../../components/BaseInput.vue'
 import PrincipalTitle from '../../../components/PrincipalTitle.vue';
 import { getGameById, updateGameById } from '../../../services/games.js'
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, inject } from 'vue';
 import { useRouter,useRoute } from 'vue-router';
-
 import { useAuth } from '../../../composition/useAuth';
+
+// injectamos la notificacion provista por app.
+const {notification, setNotifications} = inject('notification')
+
 const {user} = useAuth()
 const {
     gameName,
         processingFormEdit,
         game,
+        feedback,
         loadingGame,
         handleEditGame,
         handleFrontPageChange,
@@ -34,6 +38,10 @@ function useEditGame () {
                 })
     const gameName = ref('') 
 
+    const feedback = ref({
+        message: null,
+        type: 'success'
+    })
     const handleEditGame = async () => {
         if(processingFormEdit.value) return;
 
@@ -48,9 +56,17 @@ function useEditGame () {
 
         try {
             await updateGameById(game.value.id, updatedGameData);
+            setNotifications({
+                message: `El juego: ${game.value.title} fue editado correctamente`,
+                type: 'success'
+            })
             router.push({ path: '/panel' });
+            
         } catch (error) {
-            console.error('Error al editar el juego:', error);
+            feedback.value = {
+                message: error,
+                type: 'error'
+            }
         } finally {
             processingFormEdit.value = false;
         }
@@ -77,6 +93,7 @@ function useEditGame () {
     return {
         gameName,
         processingFormEdit,
+        feedback,
         game,
         loadingGame,
         handleEditGame,
@@ -86,7 +103,7 @@ function useEditGame () {
 </script>
 
 <template>
-    <PrincipalTitle>Editando el juego: <b>{{ loadingGame ?'...cargando juego': gameName }}</b></PrincipalTitle>
+    <PrincipalTitle class="text-center">Editando el juego: <b>{{ loadingGame ?'...cargando juego': gameName }}</b></PrincipalTitle>
     <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleEditGame">
         <div>
             <div>
@@ -135,6 +152,9 @@ function useEditGame () {
                 v-model="game.price"
             />
         </div>
+        <span v-if="feedback.message" class="text-red-600 text-center py-2">
+            {{ feedback.message }}
+        </span>
         <BaseButton :loading="processingFormEdit" color="yellow">Editar juego: {{ gameName }}</BaseButton>
     </form>
 </template>

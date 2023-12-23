@@ -63,9 +63,7 @@ export async function getGameById(gameId) {
 export async function deleteGameById(gameId) {
     try {
         await deleteDoc(doc(gamesRef, gameId));
-        console.log(`Juego con ID ${gameId} eliminado correctamente.`);
     } catch (e) {
-        console.error(`Error deleting game with ID ${gameId}:`, e);
         throw new Error(`Error al eliminar el juego con ID ${gameId}`);
     }
 }
@@ -95,10 +93,8 @@ export async function updateGameById(gameId, { title, description, price, file }
             description: description,
             price: price,
         });
-        // console.log(`Juego con ID ${gameId} actualizado correctamente.`);
     } catch (e) {
-        console.error(`Error updating game with ID ${gameId}:`, e);
-        throw new Error(`Error al actualizar el juego con ID ${gameId}`);
+        throw new Error(`Error al actualizar el juego con ID ${gameId}`, e);
     }
 }
 
@@ -108,11 +104,15 @@ export async function updateGameById(gameId, { title, description, price, file }
  * @returns {Promise}
  */
 async function editGameImage(gameId, file) {
-    const filePath = `games/${gameId}/frontPage`
-    await uploadFile(filePath, file)
+    try {
+        const filePath = `games/${gameId}/frontPage`
+        await uploadFile(filePath, file)
 
-    // Pedimos la URL que le corresponde
-    const photoURL = await getFilesUrl(filePath)
+        // Pedimos la URL que le corresponde
+        const photoURL = await getFilesUrl(filePath)
 
-    return  photoURL
+        return  photoURL
+    } catch (error) {
+        throw new Error({message: 'No se pudo guardar la imagen', code: error})
+    }
 }

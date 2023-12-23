@@ -26,12 +26,12 @@ function usePrivateChatMessages(senderUser, receiverUser){
   const loadingMessages = ref(true)
   const messages = ref([])
 
-  let chatUnSubscribe = ()=>{}
+  let chatUnSubscribe = () => {}
 // observamos el valor del receiverUser hasta que tengamos su data
   watch(receiverUser, async newReceiverUser => {
     if(newReceiverUser.id !== null) {
       loadingMessages.value = true;
-    chatUnSubscribe = subscribeToPrivateChat(
+    chatUnSubscribe.value = subscribeToPrivateChat(
       { user1: newReceiverUser.id, user2: senderUser.value.id},
       (newMessages) => (messages.value = newMessages)
     );

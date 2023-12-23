@@ -1,4 +1,6 @@
-<!-- <script>
+<script>
+// version previa a composition api
+/*
 import BaseButton from './BaseButton.vue'
 import BaseInput from './BaseInput.vue'
 import BaseLabel from './BaseLabel.vue'
@@ -30,15 +32,28 @@ export default {
         },
     }
 }
-</script> -->
+*/
+</script>
 <script setup>
 import BaseButton from './BaseButton.vue'
 import BaseInput from './BaseInput.vue'
 import BaseLabel from './BaseLabel.vue'
 import { login } from '../services/auth.js'
-import { ref } from 'vue'
+import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router';
 
+const {
+    processingLogin,
+    form,
+    feedback,
+    handleLogin
+} = useLogin()
+
+// injectamos la notificacion provista por app.
+const {notification, setNotifications} = inject('notification')
+
+function useLogin() {
+    
 // capturamos el router usando la funcion de composicion:
 // useRouter de Vue Router.
 const router = useRouter()
@@ -48,7 +63,10 @@ const form = ref({
     email:'',
     password:'',
 })
-
+const feedback = ref({
+    message: null,
+    type: 'success',
+})
 // Para los metodos:
 const handleLogin = async () => {
    try {
@@ -59,11 +77,28 @@ const handleLogin = async () => {
     await login({...form.value,});
     processingLogin.value = false;
     await Promise.resolve()
+
+    // le damos el valor a app
+    setNotifications({
+        message: 'Bienvenido nuevamente a CuevanaGames',
+        type: 'success',
+    })
     // Redireccionamos al perfil.
     router.push({ path: '/perfil' }) // funciona con un doble click...
    } catch (error) {
-    // TODO: MANEJAR EL ERROR
+    feedback.value = {
+        message: error,
+        type: 'error'
+    }
+    processingLogin.value = false;
    }
+}
+return {
+    processingLogin,
+    form,
+    feedback,
+    handleLogin
+}
 }
 </script>
 <template>
@@ -85,6 +120,9 @@ const handleLogin = async () => {
                 :disable="processingLogin"
                 v-model="form.password "/>
         </div>
+        <span v-if="feedback.message" class="text-red-600 text-center py-2">
+            {{ feedback.message }}
+        </span>
         <BaseButton :loading="processingLogin">Ingresar</BaseButton>
     </form>
 </template>

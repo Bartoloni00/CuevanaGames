@@ -32,8 +32,13 @@ function useGame () {
 }
 </script>
 <template>
-	<PrincipalTitle>Detalles del juego: {{ !loadingGame? game.title: 'Cargando...'}}</PrincipalTitle>
 	<loadingcontext :loading="loadingGame">
+		<router-link 
+			to="/tienda"
+			class="my-2"
+		>
+			todos los juegos
+		</router-link>
 		<GameDetails 
 			:game="game"
 		/>

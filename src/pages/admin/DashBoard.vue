@@ -1,6 +1,7 @@
 <script setup>
 import PrincipalTitle from "../../components/PrincipalTitle.vue";
 import loadingContext from "../../components/loadingContext.vue";
+import LinkButton from "../../components/LinkButton.vue";
 
 import { useAuth } from "../../composition/useAuth.js";
 import { useGames } from "../../composition/useGames.js";
@@ -12,19 +13,19 @@ const {loadingGames, games} = useGames()
 </script>
 <template>
   <div class="mx-auto mt-8">
-    <PrincipalTitle>Dashboard</PrincipalTitle>
+    <PrincipalTitle class="text-center">Dashboard</PrincipalTitle>
 
     <!-- Sección de agregar juego -->
     <router-link
       to="/panel/agregar-juego"
-      class="text-green-500 hover:underline border border-green-500 rounded-lg p-1"
+      class="text-green-500 hover:underline border border-green-500 rounded-lg p-1 mx-auto"
       >Agregar Juego</router-link
     >
 
-    <div class="flex mt-4">
+    <div class="flex mt-4 flex-wrap justify-center gap-4">
       <!-- Columna de Games -->
-      <div class="w-1/2 pr-4">
-        <h2 class="text-xl font-semibold mb-2">Games</h2>
+      <section class="border border-slate-200 rounded-lg p-4">
+        <h2 class="text-xl font-semibold mb-2 text-center">Games</h2>
 
         <loadingContext :loading="loadingGames">
           <table class="min-w-full table-auto mb-4">
@@ -55,25 +56,42 @@ const {loadingGames, games} = useGames()
             </tbody>
           </table>
         </loadingContext>
-      </div>
+      </section>
 
       <!-- Columna de Chats -->
-      <div class="w-1/2 pl-4">
-        <h2 class="text-xl font-semibold mb-2">Chats</h2>
+      <section class="border border-slate-200 rounded-lg p-4">
+        <h2 class="text-xl font-semibold mb-2 text-center">Chats</h2>
 
         <loadingContext :loading="loadingChats">
-          <div v-for="chat in chats" :key="chat.id" class="mb-4">
-            <div>
-              <b>Usuario: </b>
-              <router-link
-                :to="`/usuario/${chat.id}`"
-                class="text-blue-600"
-                >{{ chat.email }}</router-link
-              >
-            </div>
-          </div>
+            <table class="min-w-full table-auto mb-4">
+              <thead>
+                <tr>
+                  <th class="py-2">Usuario</th>
+                  <th class="py-2">Chat</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="chat in chats" :key="chat.id">
+                  <td class="border px-4 py-2">
+                    <router-link
+                      :to="`/usuario/${chat.id}`"
+                      class="text-blue-600"
+                      >{{ chat.email }}</router-link
+                    >
+                  </td>
+                  <td class="border px-4 py-2">
+                    <LinkButton
+                    :url="`/usuario/${chat.id}/chat`"
+                    color="yellow"
+                    >
+                    Ir al chat
+                    </LinkButton>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
         </loadingContext >
-      </div>
+      </section>
     </div>
   </div>
 </template>

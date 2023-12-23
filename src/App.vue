@@ -3,6 +3,7 @@ import { useRouter } from "vue-router";
 
 import {logout } from "./services/auth.js";
 import { useAuth } from "./composition/useAuth";
+import { ref, provide, readonly } from "vue";
 
 const {handleLogout} = useLogOut()
 const {user} = useAuth()
@@ -19,7 +20,30 @@ function useLogOut(){
   }
 }
 
+const notification = ref({
+  message:null,
+  type: 'success',
+})
 
+function setNotifications(data) {
+  notification.value = {...data}
+  setTimeout(() => {
+    clearNotification()
+  }, 10000)
+}
+
+function clearNotification(){
+  notification.value = {
+  message:null,
+  type: 'success',
+}
+}
+
+// definimos el proveedor del servicio de notificacion
+provide('notification',{
+  notification: readonly(notification),// solo lectura
+  setNotifications,
+})
 </script>
 <template>
   <header
@@ -27,7 +51,7 @@ function useLogOut(){
   >
     <span class="text-xl">Cuevana Games</span>
     <nav>
-      <ul class="flex gap-4">
+      <ul class="flex gap-4 items-center">
         <li class="hover:text-white"><router-link to="/">Home</router-link></li>
         <li class="hover:text-white">
           <router-link to="/tienda">Tienda</router-link>
@@ -57,16 +81,26 @@ function useLogOut(){
             </li>
           </template>
           <li class="hover:text-white">
-            <form action="#" @submit.prevent="handleLogout">
-              <span class="m-1">({{ user.email }})</span>
-              <button type="submit">Cerrar Sesión</button>
+            <form action="#" @submit.prevent="handleLogout" class="flex mx-1">
+              
+              <button type="submit" class="flex items-center">
+                Cerrar Sesión
+                <img v-if="user.photoURL" :src="user.photoURL" alt="" class="w-10 rounded-full m-1">
+                <span v-else class="m-1">({{ user.email }})</span> 
+              </button>
             </form>
           </li>
         </template>
       </ul>
     </nav>
   </header>
-  <main class="container p-4 m-auto h-full">
+  <main class="container p-4 m-auto h-full bg-slate-50">
+    <div v-if="notification.message && notification.type == 'success'" class="bg-green-200 p-2 mb-2 m-auto text-center capitalize rounded border">
+      {{ notification.message }}
+    </div>
+    <div v-else-if="notification.message && notification.type == 'error'" class="bg-red-200 p-2 mb-2 m-auto text-center capitalize rounded border">
+      {{ notification.message }}
+    </div>
     <router-view></router-view>
   </main>
   <footer class="bg-black text-slate-300 flex justify-center items-center">
