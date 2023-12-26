@@ -41,6 +41,7 @@ import BaseLabel from './BaseLabel.vue'
 import { login } from '../services/auth.js'
 import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router';
+import {useEyeFunction} from '../composition/useEyeFunction.js'
 
 const {
     processingLogin,
@@ -48,6 +49,12 @@ const {
     feedback,
     handleLogin
 } = useLogin()
+
+const {
+    passwordInputType,
+    handleEye,
+    iconEye
+} = useEyeFunction()
 
 // injectamos la notificacion provista por app.
 const {notification, setNotifications} = inject('notification')
@@ -100,11 +107,15 @@ return {
     handleLogin
 }
 }
+
 </script>
 <template>
      <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleLogin">
         <div>
-            <BaseLabel for="email">Email</BaseLabel>
+            <BaseLabel for="email" class="flex gap-1">
+                <img src="/icons/email.svg" alt="icono de email">
+                Email
+            </BaseLabel>
             <BaseInput 
                 type="email"
                 id="email"
@@ -113,16 +124,29 @@ return {
             />
         </div>
         <div>
-            <BaseLabel for="password">Contraseña</BaseLabel>
-            <BaseInput
-                type="password" 
+            <BaseLabel for="password" class="flex gap-1">
+                <img src="/icons/password.svg" alt="icono de contraseña">
+                Contraseña
+            </BaseLabel>
+            <div class="flex justify-center items-center">
+                <BaseInput
+                :type="passwordInputType"
                 id="password"
                 :disable="processingLogin"
-                v-model="form.password "/>
+                v-model="form.password "
+                class="w-11/12"
+                />
+                <div @click="handleEye" class="w-1/12 h-full flex items-center justify-center cursor-pointer px-2">
+                <img :src="iconEye.url" :alt="iconEye.text">
+                </div>
+            </div>
         </div>
         <span v-if="feedback.message" class="text-red-600 text-center py-2">
             {{ feedback.message }}
         </span>
-        <BaseButton :loading="processingLogin">Ingresar</BaseButton>
+        <BaseButton :loading="processingLogin" class="flex gap-1 justify-center">
+            Ingresar
+            <img src="/icons/login_white.svg" alt="icono de login">
+        </BaseButton>
     </form>
 </template>

@@ -18,8 +18,11 @@ const {loadingGames, games} = useGames()
     <!-- Sección de agregar juego -->
     <router-link
       to="/panel/agregar-juego"
-      class="text-green-500 hover:underline border border-green-500 rounded-lg p-1 mx-auto"
-      >Agregar Juego</router-link
+      class="text-green-500 hover:underline border border-green-500 rounded-lg p-1 mx-auto flex gap-1 max-w-[150px]"
+      >
+      <img src="/icons/add.svg" alt="icono agregar">
+      Agregar Juego
+      </router-link
     >
 
     <div class="flex mt-4 flex-wrap justify-center gap-4">
@@ -43,13 +46,19 @@ const {loadingGames, games} = useGames()
                 <td class="border px-4 py-2">
                   <router-link
                     :to="`/panel/editar-juego/${game.id}`"
-                    class="text-blue-500 hover:underline mr-2 border border-blue-500 rounded-lg p-1 block w-full my-2 text-center"
-                    >Editar</router-link
+                    class="text-blue-500 hover:underline mr-2 border flex gap-1 border-blue-500 rounded-lg p-1 w-full my-2 text-center"
+                    >
+                      <img src="/icons/edit.svg" alt="icono editar">
+                      Editar
+                    </router-link
                   >
                   <router-link
                     :to="`/panel/eliminar-juego/${game.id}`"
-                    class="text-red-500 hover:underline border border-red-500 rounded-lg p-1 block w-full my-2 text-center"
-                    >Eliminar</router-link
+                    class="text-red-500 flex gap-1 hover:underline border border-red-500 rounded-lg p-1 w-full my-2 text-center"
+                    >
+                      <img src="/icons/delete.svg" alt="icono eliminar">  
+                      Eliminar
+                    </router-link
                   >
                 </td>
               </tr>

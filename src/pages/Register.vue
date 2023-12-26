@@ -6,6 +6,7 @@ import PrincipalTitle from '../components/PrincipalTitle.vue'
 import {register} from '../services/auth.js'
 import {inject,ref} from 'vue'
 import { useRouter } from 'vue-router';
+import { useEyeFunction } from '../composition/useEyeFunction';
 
 // injectamos la notificacion provista por app.
 const {notification, setNotifications} = inject('notification')
@@ -17,6 +18,11 @@ const {
         handleSubmit,
     } = useRegister()
 
+const {
+    passwordInputType,
+    handleEye,
+    iconEye,
+} = useEyeFunction()
 function useRegister() {
     const router = useRouter()
 
@@ -66,7 +72,10 @@ function useRegister() {
     <PrincipalTitle class="text-center">Registrate</PrincipalTitle>
     <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleSubmit">
         <div>
-            <BaseLabel for="email">Email</BaseLabel>
+            <BaseLabel for="email" class="flex gap-1">
+                <img src="/icons/email.svg" alt="icono de email">
+                Email
+            </BaseLabel>
             <BaseInput 
                 type="email"
                 id="email"
@@ -75,17 +84,29 @@ function useRegister() {
             />
         </div>
         <div>
-            <BaseLabel for="password">Contraseña</BaseLabel>
-            <BaseInput
-                type="password" 
-                id="password"
-                :disable="processingRegister"
-                v-model="form.password"
-            />
+            <BaseLabel for="password" class="flex gap-1">
+                <img src="/icons/password.svg" alt="icono de contraseña">
+                Contraseña
+            </BaseLabel>
+            <div class="flex justify-center items-center">
+                <BaseInput
+                    :type="passwordInputType" 
+                    id="password"
+                    :disable="processingRegister"
+                    v-model="form.password "
+                    class="w-11/12"
+                    />
+                    <div @click="handleEye" class="w-1/12 h-full flex items-center justify-center cursor-pointer px-2">
+                        <img :src="iconEye.url" :alt="iconEye.text">
+                    </div>
+            </div>
         </div>
         <span v-if="feedback.message" class="text-red-600 text-center py-2">
             {{ feedback.message }}
         </span>
-        <BaseButton :loading="processingRegister">Registrarse</BaseButton>
+        <BaseButton :loading="processingRegister" class="flex gap-1 justify-center">
+            Registrarse
+            <img src="/icons/register_white.svg" alt="icono de login">
+        </BaseButton>
     </form>
 </template>
