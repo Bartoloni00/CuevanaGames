@@ -8,7 +8,7 @@ import PhotoDefault from "../components/PhotoDefault.vue";
 const {loadingGames, games} = useGames()
 </script>
 <template>
-    <PrincipalTitle class="text-center">Compra los mejores juegos en CuevanaGames</PrincipalTitle>
+    <PrincipalTitle class="text-center my-[7vh]">Compra los mejores juegos en CuevanaGames</PrincipalTitle>
     <Loadingcontext :loading="loadingGames">
       <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <article

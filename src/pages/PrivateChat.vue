@@ -68,12 +68,12 @@ function usePrivateChatForm(senderUser, receiverUser){
 </script>
 <template>
   <Loadingcontext :loading="loadingProfile">
-    <PrincipalTitle>Chat privado con: {{ userProfile.email }}</PrincipalTitle>
+    <PrincipalTitle class="text-center mt-[5vh]">Chat privado con: {{ userProfile.email }}</PrincipalTitle>
     <section>
-      <h2>Mensajes</h2>
+      <h2 class="text-center">Mensajes</h2>
       <Loadingcontext :loading="loadingMessages">
         <div
-          class="flex flex-col bg-slate-100 p-2.5 overflow-y-scroll max-h-[600px]"
+          class="flex flex-col bg-slate-100 p-2.5 overflow-y-scroll h-[50vh]"
         >
           <div
             v-for="message in messages"
@@ -85,30 +85,42 @@ function usePrivateChatForm(senderUser, receiverUser){
               'bg-green-300': message.userId === userAuth.id,
             }"
           >
-            <p class="p-2">{{ message.message }}</p>
-            <div class="text-right p-2">
-              {{ formatDate(message.created_at) || "enviando..." }}
-            </div>
+              <article>
+                <p class="p-2">{{ message.message }}</p>
+                <div class="text-right p-2">
+                  {{ formatDate(message.created_at) || "enviando..." }}
+                </div>
+              </article>
           </div>
         </div>
       </Loadingcontext>
     </section>
     <section>
       <h2 class="sr-only">Enviar un mensaje</h2>
-      <form action="#" @submit.prevent="handleMessage" class="flex flex-col">
+      <form action="#" @submit.prevent="handleMessage" class="flex gap-1 max-w-[800px] mx-auto">
         <BaseLabel for="message" class="sr-only">Mensaje</BaseLabel>
         <textarea
-          class="border border-yellow-900 w-full resize-none outline-none border-b-0"
+          class="border border-yellow-900 w-[90%] resize-none outline-none border-b-0"
           id="message"
           name="message"
           v-model="newMessage.message"
           @keydown.enter.prevent="handleMessage"
+        ></textarea
         >
-  ></textarea
-        >
-        <BaseButton type="submit" class="w-1/12">Enviar</BaseButton>
+        <BaseButton type="submit" class="w-[10%]">Enviar</BaseButton>
         <!-- Agrega el tipo "submit" al botón -->
       </form>
     </section>
   </Loadingcontext>
 </template>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to{
+  opacity: 0;
+}
+</style>

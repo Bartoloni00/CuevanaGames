@@ -135,7 +135,7 @@ function useAvatarEditForm(user){
 
 </script>
 <template>
-  <PrincipalTitle class="text-center">Mi perfil</PrincipalTitle>
+  <PrincipalTitle class="text-center mt-[5vh]">Mi perfil</PrincipalTitle>
   <loadingcontext :loading="loadingUser">
     <template v-if="!editing && !editingAvatar">
       <UserDetails

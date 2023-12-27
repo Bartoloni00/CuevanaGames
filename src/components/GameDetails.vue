@@ -1,5 +1,6 @@
 <script setup>
 import PhotoDefault from './PhotoDefault.vue';
+import BaseButton from './BaseButton.vue';
 import PrincipalTitle from './PrincipalTitle.vue';
 
     const props = defineProps({
@@ -23,13 +24,13 @@ import PrincipalTitle from './PrincipalTitle.vue';
 		<div class="w-8/12 ml-[15%] max-w-[400px]">
 			<PrincipalTitle class="text-3xl font-semibold mb-4">{{ game.title }}</PrincipalTitle>
 			<p class="text-gray-600 mb-6">{{ game.description }}</p>
-			<p class="text-lg font-bold text-blue-500 mb-4 flex gap-1">
-				<img src="/icons/price.svg" alt="">
+			<p class="text-lg font-bold text-slate-500 mb-4 flex gap-1">
+				<img src="/icons/price.svg" alt="icono del precio">
 				<b>${{ game.price }}</b>
 			</p>
 
 			<div class="flex items-center" v-if="addToCar">
-				<button class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Agregar al carrito</button>
+				<BaseButton class="max-w-[150px]" color="gray">Agregar al carrito</BaseButton>
 			</div>
         </div>
 	</section>

@@ -103,7 +103,7 @@ function useEditGame () {
 </script>
 
 <template>
-    <PrincipalTitle class="text-center">Editando el juego: <b>{{ loadingGame ?'...cargando juego': gameName }}</b></PrincipalTitle>
+    <PrincipalTitle class="text-center mt-[5vh]">Editando el juego: <b>{{ loadingGame ?'...cargando juego': gameName }}</b></PrincipalTitle>
     <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleEditGame">
         <div>
             <div>

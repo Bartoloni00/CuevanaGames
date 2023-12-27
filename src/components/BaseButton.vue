@@ -25,9 +25,12 @@ const bgColors = computed(()=> {
         case "red":
           return "bg-red-600 hover:bg-red-500 focus:bg-red-500 active:bg-red-700";
           break;
-        default:
+        case "blue":
           return "bg-blue-600 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700";
-          break;
+        break;
+        default:
+          return "bg-gray-600 hover:bg-gray-500 focus:bg-gray-500 active:bg-gray-700";
+        break;
     }
   })
 </script>

@@ -15,7 +15,7 @@ const {loadingProfile, userProfile} = useUser(route.params.id)
 </script>
 <template>
     <LoadingContext :loading="loadingProfile">
-        <PrincipalTitle>Perfil Del usuario: {{ userProfile.email }}</PrincipalTitle>
+        <PrincipalTitle class="mt-[5vh] text-center">Perfil Del usuario: {{ userProfile.email }}</PrincipalTitle>
         <UserDetails
           :user="userProfile"
         />

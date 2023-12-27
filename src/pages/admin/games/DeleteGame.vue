@@ -68,7 +68,7 @@ function useDeleteGame () {
 }
 </script>
 <template>
-    <PrincipalTitle class="text-center">¿Esta seguro de querer eliminar el juego: <b>{{ loadingGame ?'...cargando juego': game.title}}</b>?</PrincipalTitle>
+    <PrincipalTitle class="text-center mt-[5vh]">¿Esta seguro de querer eliminar el juego: <b>{{ loadingGame ?'...cargando juego': game.title}}</b>?</PrincipalTitle>
     <LoadingContext :loading="loadingGame">
     <GameDetails 
         :game="game"
