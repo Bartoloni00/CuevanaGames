@@ -11,10 +11,16 @@ const {user, loadingUser} = useAuth()
 
 const loadingCart = ref(true)
 const items = ref([])
+const subTotal = ref(0)
 
 onMounted(async ()=>{
     loadingCart.value = true
-    getItemsFromCart(user.value.id,carrito => items.value = carrito)
+    getItemsFromCart(user.value.id,carrito => {
+      items.value = carrito
+      items.value.forEach(item => {
+        subTotal.value += parseFloat(item.price)
+      })
+    })
     .catch(error => {
         console.log('[getCart | Cart.vue]', error)
     })
@@ -33,8 +39,11 @@ onMounted(async ()=>{
         <ul v-for="item in items" class="space-y-4">
             <CartItem
                 :title="item.title"
+                :gameId="item.gameId"
                 :price="item.price"
                 :image="item.photoURL"
+                :user-id="user.id"
+                class="my-1"
             />
         </ul>
 
@@ -43,22 +52,22 @@ onMounted(async ()=>{
             <dl class="space-y-0.5 text-sm text-gray-700">
               <div class="flex justify-between">
                 <dt>Subtotal</dt>
-                <dd>£250</dd>
+                <dd>$ {{ subTotal }}</dd>
               </div>
 
               <div class="flex justify-between">
-                <dt>VAT</dt>
-                <dd>£25</dd>
+                <dt>Impuestos</dt>
+                <dd>$ {{ subTotal * 0.21 }}</dd>
               </div>
 
               <div class="flex justify-between">
-                <dt>Discount</dt>
-                <dd>-£20</dd>
+                <dt>Descuentos</dt>
+                <dd>-$ {{ subTotal * 0.21 }}</dd>
               </div>
 
               <div class="flex justify-between !text-base font-medium">
                 <dt>Total</dt>
-                <dd>£200</dd>
+                <dd>$ {{ subTotal }}</dd>
               </div>
             </dl>
 
@@ -81,7 +90,7 @@ onMounted(async ()=>{
                   />
                 </svg>
 
-                <p class="whitespace-nowrap text-xs">2 Discounts Applied</p>
+                <p class="whitespace-nowrap text-xs">2 Descuentos Aplicados</p>
               </span>
             </div>
 
@@ -90,7 +99,7 @@ onMounted(async ()=>{
                 href="#"
                 class="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-gray-600"
               >
-                Checkout
+                Comprar
               </a>
             </div>
           </div>

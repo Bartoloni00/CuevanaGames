@@ -1,8 +1,15 @@
 <script setup>
+import { deleteItemFromCart } from '../services/cart';
 import PhotoDefault from './PhotoDefault.vue'
+import { inject } from 'vue';
+
 const props = defineProps({
     image: {
         type: String,
+    },
+    gameId: {
+        type: String,
+        required: true,
     },
     title:{
         type:String,
@@ -11,8 +18,30 @@ const props = defineProps({
     price: {
         type: String,
         required: true,
+    },
+    userId: {
+      type: String,
+      required: true,
     }
 })
+
+const {notification, setNotifications} = inject('notification')
+
+async function handleDeleteItemFromCart(){
+  deleteItemFromCart({userId: props.userId, gameId: props.gameId})
+  .then(()=>{
+    setNotifications({
+      message: `Sacaste un juego del carrito de compras`,
+      type: 'info'
+    })
+  })
+  .catch(error=>{
+    setNotifications({
+      message: error,
+      type: 'error'
+    })
+  })
+}
 </script>
 <template>
               <li class="flex items-center gap-4">
@@ -25,14 +54,18 @@ const props = defineProps({
             />
 
             <div>
-              <h2 class="text-sm text-gray-900">{{ props.title }}</h2>
+              <h2 class="text-sm text-gray-900">
+                <RouterLink :to="`/tienda/${props.gameId}`">{{ props.title }}</RouterLink>
+              </h2>
             </div>
 
-            <div class="flex flex-1 items-center justify-end gap-2">
+            <form action="#" @submit.prevent="handleDeleteItemFromCart" class="flex flex-1 items-center justify-end gap-2">
                 <div
                   class="h-8 w-12 rounded border-gray-200 bg-gray-50 p-0 text-center text-xs text-gray-600 [-moz-appearance:_textfield] focus:outline-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                >$ {{ props.price }}</div>
-              <button class="text-gray-600 transition hover:text-red-600">
+                >
+                  $ {{ props.price }}
+                </div>
+              <button class="text-gray-600 transition hover:text-red-600" type="submit" :id="props.gameId">
                 <span class="sr-only">Remove item</span>
 
                 <svg
@@ -50,7 +83,7 @@ const props = defineProps({
                   />
                 </svg>
               </button>
-            </div>
+            </form>
           </li>
 
 </template>

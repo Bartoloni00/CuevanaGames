@@ -15,7 +15,7 @@ Estructura del carrito
     }
 }
 */
-import { addDoc, collection, getDocs, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore";
 import { db } from "./firebase";
 
 const cartRef = collection(db, 'carts')
@@ -132,4 +132,26 @@ export async function getItemsFromCart(userId, callback){
         })
         callback(docs)
     })
+}
+
+export async function deleteItemFromCart({userId, gameId}) {
+    const cartDoc = await getCart(userId)
+    const itemsRef = collection(db, `carts/${cartDoc.id}/items`)
+    // Verificar si ya existe un juego con el mismo gameId
+    const existingItemQuery = query(itemsRef, where("gameId", "==", gameId));
+    const existingItemSnapshot = await getDocs(existingItemQuery);
+
+    if (existingItemSnapshot.empty) {
+        // Si ya existe, puedes manejar la situación como desees.
+        // Por ejemplo, lanzar un error, actualizar el juego existente, etc.
+        throw new Error("Este juego no se encuentra en el carrito.");
+    }
+    // Obtener el primer documento que coincide con la consulta
+    const existingItemDoc = existingItemSnapshot.docs[0];
+
+    try {
+        return await deleteDoc(doc(itemsRef,existingItemDoc.id))
+    } catch (e) {
+        throw new Error(`Error al eliminar el juego con ID ${gameId}`);
+    }
 }
