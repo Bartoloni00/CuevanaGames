@@ -2,8 +2,15 @@
 import PhotoDefault from './PhotoDefault.vue';
 import BaseButton from './BaseButton.vue';
 import PrincipalTitle from './PrincipalTitle.vue';
+import { useAuth } from '../composition/useAuth';
+import { addItemToCard } from '../services/cart';
+import { inject } from 'vue';
 
-    const props = defineProps({
+const {notification, setNotifications} = inject('notification')
+
+const {user} = useAuth()
+
+const props = defineProps({
         game: {
             type: Object,
             required: true,
@@ -13,6 +20,27 @@ import PrincipalTitle from './PrincipalTitle.vue';
             default: true,
         }
     })
+
+function handleAddToCart(){
+	addItemToCard(user.value.id,{
+		gameId: props.game.id,
+		title: props.game.title,
+		price: props.game.price,
+		photoURL: props.game.photoURL
+	})
+	.then(()=>{
+		setNotifications({
+        message: `${props.game.title} fue agregado al carrito`,
+        type: 'success',
+    })
+	})
+	.catch(error=>{
+		setNotifications({
+        message: error,
+        type: 'error',
+    })
+	})
+}
 </script>
 <template>
     <section class="flex bg-white p-8 rounded shadow-md ">
@@ -29,9 +57,9 @@ import PrincipalTitle from './PrincipalTitle.vue';
 				<b>${{ game.price }}</b>
 			</p>
 
-			<div class="flex items-center" v-if="addToCar">
+			<form action="#" class="flex items-center" v-if="addToCar" @submit.prevent="handleAddToCart">
 				<BaseButton class="max-w-[150px]" color="gray">Agregar al carrito</BaseButton>
-			</div>
+			</form>
         </div>
 	</section>
 </template>

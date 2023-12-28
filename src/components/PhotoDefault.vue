@@ -1,4 +1,4 @@
-<script setup>
+s<script setup>
 const props = defineProps({
     element:{
         type: Object,

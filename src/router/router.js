@@ -3,6 +3,7 @@ import { subscribeToAuth } from '../services/auth.js'
 
 import Home from '../pages/Home.vue'
 import Store from '../pages/Store.vue'
+import Cart from '../pages/Cart.vue'
 import Login from '../pages/Login.vue'
 import Register from '../pages/Register.vue'
 import MyProfile from '../pages/MyProfile.vue'
@@ -21,6 +22,7 @@ const routes = [
     {path: '/login', component: Login,},
     {path: '/registrarse', component: Register,},
     {path: '/perfil', component: MyProfile, meta: {requiresAuth: true}},
+    {path: '/carrito', component: Cart, meta: {requiresAuth: true}},
     {path: '/usuario/:id/', component: UserProfile, meta: {requiresAuth: true}},
     {path: '/usuario/:id/chat', component: PrivateChat, meta: {requiresAuth: true}},
     {path: '/panel', component: DashBoard, meta: {requiresAuth: true}},

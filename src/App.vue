@@ -105,6 +105,13 @@ provide('notification',{
               </router-link
               >
             </li>
+            <li class="hover:text-white">
+              <router-link  class="flex gap-1" to="/carrito">
+                <img src="/icons/shopping_cart_white.svg" alt="icono de un carrito de compras"/>
+                Carrito
+              </router-link
+              >
+            </li>
           </template>
           <template v-if="user.rol === 'admin'">
             <li class="hover:text-white">

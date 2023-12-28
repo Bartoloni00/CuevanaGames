@@ -4,12 +4,12 @@ import { computed } from 'vue';
 const NOTIFICATION_CLASSES = {
     success: 'bg-green-200 border-green-700',
     error: 'bg-red-200 border-red-700',
-    error: 'bg-blue-200 border-blue-700',
+    info: 'bg-blue-200 border-blue-700',
 }
 const NOTIFICATION_CLASSES_BUTTON = {
     success: 'text-green-700',
     error: 'text-red-700',
-    error: 'text-blue-700',
+    info: 'text-blue-700',
 }
 const NOTIFICATION_ICONS = {
     success: {url:'/icons/success.svg',text:'exito'},

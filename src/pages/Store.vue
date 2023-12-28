@@ -26,7 +26,7 @@ const {loadingGames, games} = useGames()
               ${{ game.price }}
             </span> -->
             <LinkButton
-            :to="`/tienda/${game.id}`"
+            :url="`/tienda/${game.id}`"
             class="mb-4 mx-auto"
             >
               Ver detalles

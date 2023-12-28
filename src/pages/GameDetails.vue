@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import loadingcontext from '../components/loadingcontext.vue';
-import PrincipalTitle from '../components/PrincipalTitle.vue';
 import {getGameById} from '../services/games.js'
 import { useRoute } from 'vue-router';
 import GameDetails from '../components/GameDetails.vue';
