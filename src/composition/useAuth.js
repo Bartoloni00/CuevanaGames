@@ -1,5 +1,5 @@
 import {ref, onMounted, onUnmounted} from "vue"
-import {subscribeToAuth} from "../services/auth.js"
+import {subscribeToAuth} from "@/services/auth.js"
 
 export function useAuth () {
     const user = ref({

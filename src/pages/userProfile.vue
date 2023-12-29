@@ -1,12 +1,12 @@
 <script setup>
 import { useRoute } from 'vue-router';
 
-import LinkButton from '../components/LinkButton.vue';
-import LoadingContext from '../components/LoadingContext.vue';
-import PrincipalTitle from '../components/PrincipalTitle.vue';
+import LinkButton from '@/components/LinkButton.vue';
+import LoadingContext from '@/components/LoadingContext.vue';
+import PrincipalTitle from '@/components/PrincipalTitle.vue';
+import UserDetails from '@/components/UserDetails.vue';
 
-import {useUser} from '../composition/useUser.js'
-import UserDetails from '../components/UserDetails.vue';
+import {useUser} from '@/composition/useUser.js'
 
 const route = useRoute()
 const {loadingProfile, userProfile} = useUser(route.params.id)

@@ -1,16 +1,13 @@
 <script setup>
 import { inject, ref } from "vue";
-
-import loadingcontext from "../components/loadingcontext.vue";
-import BaseButton from "../components/BaseButton.vue";
-import BaseLabel from "../components/BaseLabel.vue";
-import PrincipalTitle from "../components/PrincipalTitle.vue";
-import BaseInput from "../components/BaseInput.vue";
-
-import { editUser, editUserImage} from "../services/auth.js";
-
-import { useAuth } from "../composition/useAuth.js";
-import UserDetails from "../components/UserDetails.vue";
+import LoadingContext from "@/components/LoadingContext.vue";
+import BaseButton from "@/components/BaseButton.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
+import PrincipalTitle from "@/components/PrincipalTitle.vue";
+import BaseInput from "@/components/BaseInput.vue";
+import UserDetails from "@/components/UserDetails.vue";
+import { editUser, editUserImage} from "@/services/auth.js";
+import { useAuth } from "@/composition/useAuth.js";
 
 // injectamos la notificacion provista por app.
 const {notification, setNotifications} = inject('notification')
@@ -136,7 +133,7 @@ function useAvatarEditForm(user){
 </script>
 <template>
   <PrincipalTitle class="text-center mt-[5vh]">Mi perfil</PrincipalTitle>
-  <loadingcontext :loading="loadingUser">
+  <LoadingContext :loading="loadingUser">
     <template v-if="!editing && !editingAvatar">
       <UserDetails
         :user="user"
@@ -205,5 +202,5 @@ function useAvatarEditForm(user){
         <BaseButton @click="handleAvatarEditCancel" color="red" class="max-w-[520px] m-auto">Cancelar</BaseButton>
       </div>
     </template>
-  </loadingcontext>
+  </LoadingContext>
 </template>

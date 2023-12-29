@@ -1,5 +1,5 @@
 <script setup>
-import FAQCard from '../../components/FAQCard.vue';
+import FAQCard from '@/components/FAQCard.vue';
 
 </script>
 <template>

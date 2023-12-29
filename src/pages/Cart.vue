@@ -1,31 +1,47 @@
 <script setup>
-import { onMounted, ref } from 'vue';
-import CartItem from '../components/CartItem.vue';
-import PrincipalTitle from '../components/PrincipalTitle.vue';
-import Loadingcontext from '../components/loadingcontext.vue';
-import { useAuth } from "../composition/useAuth.js";
+import { onMounted, onUnmounted, ref } from 'vue';
+import CartItem from '@/components/CartItem.vue';
+import PrincipalTitle from '@/components/PrincipalTitle.vue';
+import LoadingContext from '@/components/LoadingContext.vue';
+import { useAuth } from "@/composition/useAuth.js";
 
-import {getItemsFromCart} from '../services/cart.js'
+import {getItemsFromCart} from '@/services/cart.js'
 
 const {user, loadingUser} = useAuth()
 
-const loadingCart = ref(true)
-const items = ref([])
-const subTotal = ref(0)
+const {
+  loadingCart,
+  items,
+  subTotal,
+} = useCart(user)
 
-onMounted(async ()=>{
-    loadingCart.value = true
-    getItemsFromCart(user.value.id,carrito => {
-      items.value = carrito
-      items.value.forEach(item => {
-        subTotal.value += parseFloat(item.price)
-      })
-    })
-    .catch(error => {
-        console.log('[getCart | Cart.vue]', error)
-    })
-    loadingCart.value = false
+function useCart(user){
+  const loadingCart = ref(true)
+  const items = ref([])
+  const subTotal = ref(0)
+
+  let cartUnsubscribe = ()=>{}
+  onMounted(async ()=>{
+      loadingCart.value = true
+      cartUnsubscribe.value = getItemsFromCart(user.value.id,carrito => {
+                        items.value = carrito
+                        items.value.forEach(item => {
+                          subTotal.value += parseFloat(item.price)
+                        })
+                      })
+                      .catch(error => {
+                          console.log('[getCart | Cart.vue]', error)
+                      })
+      loadingCart.value = false
 })
+onUnmounted(()=>cartUnsubscribe())
+
+return {
+  loadingCart,
+  items,
+  subTotal,
+}
+}
 </script>
 <template>
 <section>
@@ -34,7 +50,7 @@ onMounted(async ()=>{
       <header class="text-center">
         <PrincipalTitle class="text-center">Tu carrito</PrincipalTitle>
       </header>
-      <Loadingcontext :loading="loadingCart">
+      <LoadingContext :loading="loadingCart">
         <div class="mt-8">
         <ul v-for="item in items" class="space-y-4">
             <CartItem
@@ -105,7 +121,7 @@ onMounted(async ()=>{
           </div>
         </div>
       </div>
-      </Loadingcontext>
+      </LoadingContext>
     </div>
   </div>
 </section>

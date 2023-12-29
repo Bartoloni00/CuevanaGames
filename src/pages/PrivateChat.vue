@@ -1,19 +1,14 @@
 <script setup>
-import BaseButton from "../components/BaseButton.vue";
-import BaseLabel from "../components/BaseLabel.vue";
-import PrincipalTitle from "../components/PrincipalTitle.vue";
-
-import { formatDate } from "../helpers/date.js";
-import {
-  sendPrivateMessage,
-  subscribeToPrivateChat,
-} from "../services/private-chat.js";
-
-import { useAuth } from "../composition/useAuth";
-import { useUser } from "../composition/useUser";
+import BaseButton from "@/components/BaseButton.vue";
+import BaseLabel from "@/components/BaseLabel.vue";
+import PrincipalTitle from "@/components/PrincipalTitle.vue";
+import Loadingcontext from "@/components/loadingcontext.vue";
+import { formatDate } from "@/helpers/date.js";
+import {sendPrivateMessage,subscribeToPrivateChat} from "@/services/private-chat.js";
+import { useAuth } from "@/composition/useAuth";
+import { useUser } from "@/composition/useUser";
 import { useRoute } from "vue-router";
 import { watch, onUnmounted, ref } from "vue";
-import Loadingcontext from "../components/loadingcontext.vue";
 
 const route = useRoute()
 // con esta sintaxis user pasa a ser userAuth en este archivo

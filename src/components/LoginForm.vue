@@ -38,10 +38,10 @@ export default {
 import BaseButton from './BaseButton.vue'
 import BaseInput from './BaseInput.vue'
 import BaseLabel from './BaseLabel.vue'
-import { login } from '../services/auth.js'
+import { login } from '@/services/auth.js'
 import { inject, ref } from 'vue'
 import { useRouter } from 'vue-router';
-import {useEyeFunction} from '../composition/useEyeFunction.js'
+import {useEyeFunction} from '@/composition/useEyeFunction.js'
 
 const {
     processingLogin,

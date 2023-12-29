@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import loadingcontext from '../components/loadingcontext.vue';
+import LoadingContext from '../components/LoadingContext.vue';
 import {getGameById} from '../services/games.js'
 import { useRoute } from 'vue-router';
 import GameDetails from '../components/GameDetails.vue';
@@ -31,7 +31,7 @@ function useGame () {
 }
 </script>
 <template>
-	<loadingcontext :loading="loadingGame">
+	<LoadingContext :loading="loadingGame">
 		<nav aria-label="Breadcrumb" class="flex mt-[5vh]">
   <ol class="flex overflow-hidden rounded-lg border border-gray-200 text-gray-600">
     <li class="flex items-center">
@@ -74,5 +74,5 @@ function useGame () {
 		<GameDetails 
 			:game="game"
 		/>
-	</loadingcontext>
+	</LoadingContext>
 </template>

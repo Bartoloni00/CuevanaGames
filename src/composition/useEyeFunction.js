@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
 export function useEyeFunction() {
   const passwordInputType = ref('password');

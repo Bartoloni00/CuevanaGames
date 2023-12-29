@@ -1,15 +1,15 @@
 <script setup>
-import PrincipalTitle from "../components/PrincipalTitle.vue";
-import LinkButton from "../components/LinkButton.vue";
-import { useGames } from "../composition/useGames";
-import Loadingcontext from "../components/loadingcontext.vue";
-import PhotoDefault from "../components/PhotoDefault.vue";
+import PrincipalTitle from "@/components/PrincipalTitle.vue";
+import LinkButton from "@/components/LinkButton.vue";
+import { useGames } from "@/composition/useGames";
+import LoadingContext from "@/components/LoadingContext.vue";
+import PhotoDefault from "@/components/PhotoDefault.vue";
 
 const {loadingGames, games} = useGames()
 </script>
 <template>
     <PrincipalTitle class="text-center my-[7vh]">Compra los mejores juegos en CuevanaGames</PrincipalTitle>
-    <Loadingcontext :loading="loadingGames">
+    <LoadingContext :loading="loadingGames">
       <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <article
           v-for="game in games"
@@ -33,5 +33,5 @@ const {loadingGames, games} = useGames()
             </LinkButton>
         </article>
       </section>
-    </Loadingcontext>
+    </LoadingContext>
 </template>

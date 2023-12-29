@@ -1,5 +1,5 @@
 <script setup>
-import Linkbutton from '../../components/LinkButton.vue';
+import LinkButton from '@/components/LinkButton.vue';
 
 
 </script>
@@ -13,7 +13,7 @@ import Linkbutton from '../../components/LinkButton.vue';
             <p className="text-xl my-[5%]">
                 Tu próximo juego favorito al precio más barato del mercado
             </p>
-            <Linkbutton url="/tienda">
+            <LinkButton url="/tienda">
                 Descubrir juegos
             </LinkButton>
             </div>

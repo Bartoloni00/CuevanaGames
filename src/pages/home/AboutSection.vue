@@ -1,5 +1,5 @@
 <script setup>
-import Linkbutton from '../../components/LinkButton.vue';
+import LinkButton from '@/components/LinkButton.vue';
 
 
 </script>
@@ -23,7 +23,7 @@ import Linkbutton from '../../components/LinkButton.vue';
       <p class="mb-2 text-lg font-bold tracking-tight text-black">
         Jonathan Abraham Bartoloni
       </p>
-      <Linkbutton 
+      <LinkButton 
         url="https://github.com/Bartoloni00"
         internalLink="external"
       >
@@ -43,7 +43,7 @@ import Linkbutton from '../../components/LinkButton.vue';
           d="M1 5h12m0 0L9 1m4 4L9 9"
         />
         </svg>
-      </Linkbutton>
+      </LinkButton>
     </div>
   </div>
 
@@ -61,7 +61,7 @@ import Linkbutton from '../../components/LinkButton.vue';
       <p class="mb-2 text-lg font-bold tracking-tight text-black">
         Ezequiel Thomas Arevalo
       </p>
-      <Linkbutton 
+      <LinkButton 
         url="https://github.com/Ezearevalodev"
         internalLink="external"
       >
@@ -81,7 +81,7 @@ import Linkbutton from '../../components/LinkButton.vue';
           d="M1 5h12m0 0L9 1m4 4L9 9"
         />
         </svg>
-      </Linkbutton>    
+      </LinkButton>    
     </div>
   </div>
   </div>

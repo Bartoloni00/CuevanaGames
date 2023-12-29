@@ -1,5 +1,5 @@
 import { onMounted, ref } from "vue";
-import { getAllUsers } from "../services/user.js";
+import { getAllUsers } from "@/services/user.js";
 
 export function useChats () {
     const loadingChats = ref(false)

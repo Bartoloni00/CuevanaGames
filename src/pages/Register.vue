@@ -1,12 +1,12 @@
 <script setup>
-import BaseButton from '../components/BaseButton.vue';
-import BaseLabel from '../components/BaseLabel.vue'
-import BaseInput from '../components/BaseInput.vue'
-import PrincipalTitle from '../components/PrincipalTitle.vue'
-import {register} from '../services/auth.js'
+import BaseButton from '@/components/BaseButton.vue';
+import BaseLabel from '@/components/BaseLabel.vue'
+import BaseInput from '@/components/BaseInput.vue'
+import PrincipalTitle from '@/components/PrincipalTitle.vue'
+import {register} from '@/services/auth.js'
 import {inject,ref} from 'vue'
 import { useRouter } from 'vue-router';
-import { useEyeFunction } from '../composition/useEyeFunction';
+import { useEyeFunction } from '@/composition/useEyeFunction';
 
 // injectamos la notificacion provista por app.
 const {notification, setNotifications} = inject('notification')

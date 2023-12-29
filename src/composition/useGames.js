@@ -1,4 +1,4 @@
-import { getAllGames } from "../services/games.js";
+import { getAllGames } from "@/services/games.js";
 import { onMounted, ref } from "vue";
 
 export function useGames () {

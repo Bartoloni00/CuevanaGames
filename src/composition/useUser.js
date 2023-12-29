@@ -1,6 +1,6 @@
 import { onMounted, ref } from 'vue';
 
-import { getUserById } from '../services/user';
+import { getUserById } from '@/services/user';
 // import { fetchUserProfile } from '../services/auth';
 
 export function useUser (id) {

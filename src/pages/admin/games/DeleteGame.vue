@@ -1,13 +1,12 @@
 <script setup>
 import { onMounted, inject, ref } from 'vue';
-import BaseButton from '../../../components/BaseButton.vue';
-import LoadingContext from '../../../components/LoadingContext.vue';
-import PrincipalTitle from '../../../components/PrincipalTitle.vue';
-import { getGameById, deleteGameById } from '../../../services/games.js';
+import BaseButton from '@/components/BaseButton.vue';
+import LoadingContext from '@/components/LoadingContext.vue';
+import PrincipalTitle from '@/components/PrincipalTitle.vue';
+import GameDetails from '@/components/GameDetails.vue';
+import { getGameById, deleteGameById } from '@/services/games.js';
 import { useRoute,useRouter } from 'vue-router';
-
-import { useAuth } from '../../../composition/useAuth';
-import GameDetails from '../../../components/GameDetails.vue';
+import { useAuth } from '@/composition/useAuth';
 
 // injectamos la notificacion provista por app.
 const {notification, setNotifications} = inject('notification')

@@ -1,7 +1,7 @@
 <script setup>
-import { deleteItemFromCart } from '../services/cart';
+import { deleteItemFromCart } from '@/services/cart';
 import PhotoDefault from './PhotoDefault.vue'
-import { inject } from 'vue';
+import { inject } from 'vue'
 
 const props = defineProps({
     image: {

@@ -1,11 +1,11 @@
 <script setup>
-import PrincipalTitle from "../../components/PrincipalTitle.vue";
-import loadingContext from "../../components/loadingContext.vue";
-import LinkButton from "../../components/LinkButton.vue";
+import PrincipalTitle from "@/components/PrincipalTitle.vue";
+import LoadingContext from "@/components/LoadingContext.vue";
+import LinkButton from "@/components/LinkButton.vue";
 
-import { useAuth } from "../../composition/useAuth.js";
-import { useGames } from "../../composition/useGames.js";
-import { useChats } from "../../composition/useChats.js";
+import { useAuth } from "@/composition/useAuth.js";
+import { useGames } from "@/composition/useGames.js";
+import { useChats } from "@/composition/useChats.js";
 
 const {user} = useAuth() // esta linea es importante
 const {loadingChats, chats} = useChats()
@@ -30,7 +30,7 @@ const {loadingGames, games} = useGames()
       <section class="border border-slate-200 rounded-lg p-4">
         <h2 class="text-xl font-semibold mb-2 text-center">Games</h2>
 
-        <loadingContext :loading="loadingGames">
+        <LoadingContext :loading="loadingGames">
           <table class="min-w-full table-auto mb-4">
             <thead>
               <tr>
@@ -64,14 +64,14 @@ const {loadingGames, games} = useGames()
               </tr>
             </tbody>
           </table>
-        </loadingContext>
+        </LoadingContext>
       </section>
 
       <!-- Columna de Chats -->
       <section class="border border-slate-200 rounded-lg p-4">
         <h2 class="text-xl font-semibold mb-2 text-center">Chats</h2>
 
-        <loadingContext :loading="loadingChats">
+        <LoadingContext :loading="loadingChats">
             <table class="min-w-full table-auto mb-4">
               <thead>
                 <tr>
@@ -99,7 +99,7 @@ const {loadingGames, games} = useGames()
                 </tr>
               </tbody>
             </table>
-        </loadingContext >
+        </LoadingContext >
       </section>
     </div>
   </div>

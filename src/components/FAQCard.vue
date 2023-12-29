@@ -17,7 +17,6 @@ const props = defineProps({
 <template>
     <details
     class="group border-s-4 border-black bg-gray-100 p-6 [&_summary::-webkit-details-marker]:hidden"
-    open
   >
     <summary class="flex cursor-pointer items-center justify-between gap-1.5">
       <h3 class="text-lg font-medium text-gray-900">
@@ -40,8 +39,25 @@ const props = defineProps({
       </span>
     </summary>
 
-    <p class="mt-4 leading-relaxed text-gray-700 max-w-[800px] mx-auto">
-      {{ props.description }}
-    </p>
+    <Transition name="fade">
+      <p class="mt-4 leading-relaxed text-gray-700 max-w-[800px] mx-auto">
+        {{ props.description }}
+      </p>
+    </Transition>
   </details>
 </template>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to{
+  opacity: 0;
+}
+/* .fade-enter-to, esto es algo por defecto
+.fade-leave-to{
+  opacity: 1;
+} */
+</style>
