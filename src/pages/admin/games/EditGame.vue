@@ -104,7 +104,7 @@ function useEditGame () {
 
 <template>
     <PrincipalTitle class="text-center mt-[5vh]">Editando el juego: <b>{{ loadingGame ?'...cargando juego': gameName }}</b></PrincipalTitle>
-    <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleEditGame">
+    <form action="#" class="max-w-[520px] sm:mx-auto m-2" @submit.prevent="handleEditGame">
         <div>
             <div>
             <BaseLabel for="photo">Imagen de perfil </BaseLabel>

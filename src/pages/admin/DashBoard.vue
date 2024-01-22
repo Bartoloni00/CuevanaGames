@@ -46,7 +46,7 @@ const {loadingGames, games} = useGames()
                 <td class="border px-4 py-2">
                   <router-link
                     :to="`/panel/editar-juego/${game.id}`"
-                    class="text-blue-500 hover:underline mr-2 border flex gap-1 border-blue-500 rounded-lg p-1 w-full my-2 text-center"
+                    class="text-blue-500 hover:underline mr-2 border flex gap-1 border-blue-500 rounded-lg p-1 my-2 text-center w-[140px]"
                     >
                       <img src="/icons/edit.svg" alt="icono editar">
                       Editar
@@ -54,7 +54,7 @@ const {loadingGames, games} = useGames()
                   >
                   <router-link
                     :to="`/panel/eliminar-juego/${game.id}`"
-                    class="text-red-500 flex gap-1 hover:underline border border-red-500 rounded-lg p-1 w-full my-2 text-center"
+                    class="text-red-500 flex gap-1 hover:underline border border-red-500 rounded-lg p-1 my-2 text-center w-[140px]"
                     >
                       <img src="/icons/delete.svg" alt="icono eliminar">  
                       Eliminar
@@ -81,14 +81,14 @@ const {loadingGames, games} = useGames()
               </thead>
               <tbody>
                 <tr v-for="chat in chats" :key="chat.id">
-                  <td class="border px-4 py-2">
+                  <td class="border px-8 py-2">
                     <router-link
                       :to="`/usuario/${chat.id}`"
                       class="text-blue-600"
                       >{{ chat.email }}</router-link
                     >
                   </td>
-                  <td class="border px-4 py-2">
+                  <td class="border px-8 py-2">
                     <LinkButton
                     :url="`/usuario/${chat.id}/chat`"
                     color="yellow"

@@ -16,7 +16,7 @@ const props = defineProps({
 </script>
 <template>
     <details
-    class="group border-s-4 border-black bg-gray-100 p-6 [&_summary::-webkit-details-marker]:hidden"
+    class="group border-s-4 border-[#ff7f0a] bg-gray-100 p-6 [&_summary::-webkit-details-marker]:hidden"
   >
     <summary class="flex cursor-pointer items-center justify-between gap-1.5">
       <h3 class="text-lg font-medium text-gray-900">

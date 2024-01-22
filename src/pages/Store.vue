@@ -14,7 +14,7 @@ const {loadingGames, games} = useGames()
         <article
           v-for="game in games"
           :key="game.id"
-          class="bg-slate-100 flex flex-col  rounded shadow-lg hover:shadow-xl hover:bg-slate-200 transition-all duration-300"
+          class="bg-slate-100 flex flex-col rounded shadow-lg hover:shadow-xl hover:bg-slate-200 transition-all duration-300"
         >
               <PhotoDefault 
               :element="game"
@@ -28,6 +28,7 @@ const {loadingGames, games} = useGames()
             <LinkButton
             :url="`/tienda/${game.id}`"
             class="mb-4 mx-auto"
+            color="yellow"
             >
               Ver detalles
             </LinkButton>

@@ -78,7 +78,7 @@ return {
 
 <template>
     <PrincipalTitle class="text-center mt-[5vh]">Agregar Juego</PrincipalTitle>
-    <form action="#" class="max-w-[520px] m-auto" @submit.prevent="handleCreateGame">
+    <form action="#" class="max-w-[520px] sm:mx-auto m-2" @submit.prevent="handleCreateGame">
         <div>
             <BaseLabel for="title">Titulo</BaseLabel>
             <BaseInput 

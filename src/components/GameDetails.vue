@@ -43,13 +43,13 @@ function handleAddToCart(){
 }
 </script>
 <template>
-    <section class="flex bg-white p-8 rounded shadow-md ">
-		<picture class="w-4/12">
+    <section class="flex bg-white p-8 rounded shadow-md flex-col sm:flex-row ">
+		<picture class="w-full sm:max-w-[600px] sm:my-0 my-2">
 			<PhotoDefault 
 				:element="game"
 			/>
 		</picture>
-		<div class="w-8/12 ml-[15%] max-w-[400px]">
+		<div class="w-8/12 ml-[5%] max-w-[400px]">
 			<PrincipalTitle class="text-3xl font-semibold mb-4">{{ game.title }}</PrincipalTitle>
 			<p class="text-gray-600 mb-6">{{ game.description }}</p>
 			<p class="text-lg font-bold text-slate-500 mb-4 flex gap-1">

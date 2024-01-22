@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       gridTemplateRows:{
-        'layout': '60px 1fr 100px'
+        'layout': 'minmax(60px, auto) 1fr 100px'
       }
     },
   },

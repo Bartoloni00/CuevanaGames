@@ -73,11 +73,11 @@ function useDeleteGame () {
         :game="game"
         :add-to-car="false"
     />
-    <form action="#" @submit.prevent="deleteGame" class="mt-2">
+    <form action="#" @submit.prevent="deleteGame" class="sm:mx-auto m-2 mt-4 flex justify-center">
         <span v-if="feedback.message" class="text-red-600 text-center py-2">
             {{ feedback.message }}
         </span>
-        <BaseButton color="red">Eliminar {{ game.title }}</BaseButton>
+        <BaseButton color="red" class="w-full max-w-[500px] mx-auto ">Eliminar {{ game.title }}</BaseButton>
     </form>
     </LoadingContext>
 </template>
