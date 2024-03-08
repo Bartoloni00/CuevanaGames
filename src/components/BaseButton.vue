@@ -17,7 +17,7 @@ const props = defineProps({
 const bgColors = computed(()=> {
       switch (props.color) {
         case "yellow":
-          return "bg-yellow-600 hover:bg-yellow-500 focus:bg-yellow-500 active:bg-yellow-700";
+          return "bg-[#ff7f0a] hover:bg-[#FF6600] focus:bg-[#cc4902] active:bg-[#cc4902]";
           break;
         case "green":
           return "bg-green-600 hover:bg-green-500 focus:bg-green-500 active:bg-green-700";
@@ -29,7 +29,7 @@ const bgColors = computed(()=> {
           return "bg-blue-600 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700";
         break;
         default:
-          return "bg-gray-600 hover:bg-gray-500 focus:bg-gray-500 active:bg-gray-700";
+          return "bg-[#ff7f0a] hover:bg-[#FF6600] focus:bg-[#cc4902] active:bg-[#cc4902]";
         break;
     }
   })

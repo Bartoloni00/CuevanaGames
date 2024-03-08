@@ -138,15 +138,15 @@ function useAvatarEditForm(user){
       <UserDetails
         :user="user"
       />
-      <div class="flex gap-1">
+      <div class="flex sm:flex-row flex-col mx-auto gap-1 justify-center items-center">
         <BaseButton
-        class="w-2/12"
+        class="w-[250px] my-2"
         @click="handleShowAvatarEdit"
       >
         Editar imagen de perfil
       </BaseButton>
         <BaseButton
-        class="w-10/12"
+        class="w-[250px] my-2"
         @click="handleShowFormEdit"
       >
         Editar Perfil

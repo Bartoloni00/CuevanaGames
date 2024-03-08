@@ -13,7 +13,7 @@ import LinkButton from '@/components/LinkButton.vue';
             <p className="text-xl my-[5%]">
                 Tu próximo juego favorito al precio más barato del mercado
             </p>
-            <LinkButton url="/tienda">
+            <LinkButton url="/tienda" color="yellow">
                 Descubrir juegos
             </LinkButton>
             </div>
